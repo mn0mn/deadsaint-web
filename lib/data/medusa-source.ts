@@ -1,39 +1,66 @@
-import { Product } from "../types";
+import { Brand, Category, Collection, Product } from "../types";
 import { CommerceSource } from "./source";
 
 /**
  * Medusa implementation of CommerceSource — NOT wired up yet.
  *
- * Fill this in once:
- *   1. The Medusa backend is running (Postgres + Redis + `medusa` server)
- *   2. `@medusajs/js-sdk` is installed in this project
- *   3. A Medusa client is configured (base URL via env var, e.g.
- *      NEXT_PUBLIC_MEDUSA_BACKEND_URL) and a default region_id is known
+ * Deliberately not touching this until:
+ *   1. Medusa backend is running (Postgres + Redis + `medusa` server)
+ *   2. `@medusajs/js-sdk` is installed and configured
+ *   3. Mapping from Medusa's shapes to ours is worked out — notably:
+ *        - Medusa has no native "Brand" entity. This will likely map from
+ *          a Product Type, a dedicated category, or product metadata.
+ *        - Medusa's ProductCategory already supports parent_category_id,
+ *          which maps directly to our Category.parentId.
+ *        - Medusa's Product + Options + Variants map closely to our
+ *          Product + ProductVariant + ProductOptionValue already.
  *
- * Rough shape once real (uncomment/adapt, don't copy blindly):
- *
- *   import Medusa from "@medusajs/js-sdk";
- *   const medusa = new Medusa({ baseUrl: process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL! });
- *
- *   async getAllProducts() {
- *     const { products } = await medusa.store.product.list({ region_id: REGION_ID });
- *     return products.map(toDomainProduct);
- *   }
- *
- * `toDomainProduct` would be a small mapper function converting Medusa's
- * product shape into our own `Product` type from lib/types.ts — keeping
- * Medusa's data shape from leaking into the rest of the app.
+ * A small mapper module (e.g. medusa-mapper.ts) converting Medusa API
+ * responses into our domain types belongs alongside this file, so Medusa's
+ * shapes never leak past this one module.
  */
+function notImplemented(method: string): never {
+  throw new Error(`medusaSource.${method} not implemented yet`);
+}
+
 export const medusaSource: CommerceSource = {
-  async getAllProducts(): Promise<Product[]> {
-    throw new Error("medusaSource.getAllProducts not implemented yet");
+  async getProducts(): Promise<Product[]> {
+    return notImplemented("getProducts");
   },
-
   async getProductBySlug(): Promise<Product | undefined> {
-    throw new Error("medusaSource.getProductBySlug not implemented yet");
+    return notImplemented("getProductBySlug");
+  },
+  async getProductsByCategory(): Promise<Product[]> {
+    return notImplemented("getProductsByCategory");
+  },
+  async getProductsByCollection(): Promise<Product[]> {
+    return notImplemented("getProductsByCollection");
+  },
+  async getProductsByBrand(): Promise<Product[]> {
+    return notImplemented("getProductsByBrand");
+  },
+  async searchProducts(): Promise<Product[]> {
+    return notImplemented("searchProducts");
   },
 
-  async getProductsByCategory(): Promise<Product[]> {
-    throw new Error("medusaSource.getProductsByCategory not implemented yet");
+  async getCategories(): Promise<Category[]> {
+    return notImplemented("getCategories");
+  },
+  async getCategoryBySlug(): Promise<Category | undefined> {
+    return notImplemented("getCategoryBySlug");
+  },
+
+  async getCollections(): Promise<Collection[]> {
+    return notImplemented("getCollections");
+  },
+  async getCollectionBySlug(): Promise<Collection | undefined> {
+    return notImplemented("getCollectionBySlug");
+  },
+
+  async getBrands(): Promise<Brand[]> {
+    return notImplemented("getBrands");
+  },
+  async getBrandBySlug(): Promise<Brand | undefined> {
+    return notImplemented("getBrandBySlug");
   },
 };
