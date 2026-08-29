@@ -11,7 +11,9 @@
   "dependencies": {
     "next": "^15.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "@medusajs/js-sdk": "^2.13.0",
+    "@medusajs/types": "^2.13.0"
   },
   "devDependencies": {
     "typescript": "^5.5.0",

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
-import { getAllProducts } from "@/lib/products";
+import { getAllProducts } from "@/lib/medusa";
 
 export default async function HomePage() {
   const products = await getAllProducts();
