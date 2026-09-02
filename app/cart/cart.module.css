@@ -1,0 +1,491 @@
+.page {
+  min-height: 100vh;
+  padding: 8rem 4vw 6rem;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.loading {
+  min-height: 60vh;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+}
+
+.loading span {
+  animation: blink 1s steps(2, end) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* HEADER */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+}
+
+.eyebrow {
+  margin: 0 0 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 13vw, 12rem);
+  line-height: 0.74;
+  letter-spacing: -0.075em;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.title span,
+.emptyTitle span {
+  color: var(--blood);
+}
+
+.itemCount {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.65rem;
+  padding-bottom: 0.4rem;
+  font-family: var(--font-mono);
+}
+
+.itemCount span {
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+}
+
+.itemCount strong {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  line-height: 0.75;
+  font-weight: 400;
+}
+
+/* CONTENT */
+
+.rule {
+  height: 1px;
+  margin-top: 4rem;
+  background: var(--foreground);
+}
+
+.error {
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--blood);
+  color: var(--blood);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(20rem, 29rem);
+  gap: clamp(3rem, 8vw, 9rem);
+  margin-top: 2rem;
+  align-items: start;
+}
+
+/* ITEMS */
+
+.item {
+  display: grid;
+  grid-template-columns: 2rem minmax(10rem, 15rem) minmax(0, 1fr);
+  gap: 1.5rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--foreground) 22%, transparent);
+}
+
+.index {
+  padding-top: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  opacity: 0.45;
+}
+
+.image {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 500ms
+    cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.image:hover img {
+  transform: scale(1.05);
+}
+
+.noImage {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.noImage span {
+  font-family: var(--font-display);
+  font-size: 5rem;
+  letter-spacing: -0.08em;
+}
+
+.details {
+  min-width: 0;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.productType,
+.variant {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.57rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.productType {
+  margin-bottom: 0.5rem;
+  opacity: 0.45;
+}
+
+.variant {
+  margin-top: 0.8rem;
+  opacity: 0.55;
+}
+
+.productName {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3vw, 3.2rem);
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.price {
+  flex-shrink: 0;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--foreground);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+}
+
+.quantity button {
+  width: 2.5rem;
+  height: 2.3rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.quantity button:hover {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.quantity span {
+  min-width: 2rem;
+  text-align: center;
+}
+
+.remove {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  opacity: 0.45;
+}
+
+.remove:hover {
+  opacity: 1;
+  color: var(--blood);
+}
+
+/* SUMMARY */
+
+.summary {
+  position: sticky;
+  top: 2rem;
+  border: 1px solid var(--foreground);
+  padding: 1.5rem;
+}
+
+.summaryHeader {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--foreground);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 1.5rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+}
+
+.totalRow strong {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.divider {
+  height: 1px;
+  background: color-mix(
+    in srgb,
+    var(--foreground) 20%,
+    transparent
+  );
+}
+
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.07em;
+}
+
+.metaRow span:last-child {
+  text-align: right;
+  opacity: 0.45;
+}
+
+.checkout,
+.shopButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 2rem;
+  padding: 1.2rem 1rem;
+  border: 1px solid var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.checkout:hover,
+.shopButton:hover {
+  border-color: var(--blood);
+  background: var(--blood);
+}
+
+.checkout span,
+.shopButton span {
+  font-size: 1rem;
+}
+
+.continue {
+  display: block;
+  margin-top: 1.4rem;
+  color: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.57rem;
+  letter-spacing: 0.09em;
+  text-decoration: none;
+}
+
+.continue:hover {
+  text-decoration: underline;
+}
+
+.warning {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 4rem;
+  padding-top: 1rem;
+  border-top: 1px solid
+    color-mix(in srgb, var(--foreground) 20%, transparent);
+}
+
+.warning span {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--blood);
+}
+
+.warning p {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  line-height: 1.5;
+  letter-spacing: 0.07em;
+  opacity: 0.45;
+}
+
+/* EMPTY */
+
+.empty {
+  min-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.cross {
+  margin-bottom: 1.5rem;
+  color: var(--blood);
+  font-family: var(--font-display);
+  font-size: 3rem;
+}
+
+.emptyTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 14vw, 12rem);
+  line-height: 0.72;
+  letter-spacing: -0.075em;
+  font-weight: 400;
+}
+
+.emptyText {
+  margin: 3rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  line-height: 1.7;
+  letter-spacing: 0.05em;
+}
+
+.empty .shopButton {
+  width: auto;
+  min-width: 14rem;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 850px) {
+  .page {
+    padding: 6rem 1.25rem 4rem;
+  }
+
+  .layout {
+    display: block;
+  }
+
+  .summary {
+    position: static;
+    margin-top: 2rem;
+  }
+
+  .title {
+    font-size: clamp(4.5rem, 19vw, 8rem);
+  }
+
+  .itemCount strong {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .header {
+    display: block;
+  }
+
+  .itemCount {
+    justify-content: flex-end;
+    margin-top: 2rem;
+  }
+
+  .item {
+    grid-template-columns: 1rem 7.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+
+  .top {
+    display: block;
+  }
+
+  .price {
+    margin-top: 1rem;
+  }
+
+  .productName {
+    font-size: 1.5rem;
+  }
+
+  .bottom {
+    display: block;
+  }
+
+  .remove {
+    display: block;
+    margin-top: 1rem;
+  }
+}
