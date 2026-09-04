@@ -56,7 +56,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <strong>RESPONSE TIME</strong>
-                <span>1–3 BUSINESS ETERNTIES</span>
+                <span>1–3 BUSINESS ETERNITIES</span>
               </div>
               <div>
                 <strong>EMERGENCY</strong>
