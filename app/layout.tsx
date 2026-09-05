@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { CartProvider } from "./providers/cartProvider";
+import { CustomerProvider } from "./providers/customerProvider";
 
 export const metadata: Metadata = {
   title: "Deadsaint — Punk & Metal Fashion",
@@ -17,11 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <CartProvider>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-        </CartProvider>
+        <CustomerProvider>
+          <CartProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </CartProvider>
+        </CustomerProvider>
       </body>
     </html>
   );
