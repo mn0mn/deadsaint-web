@@ -2,9 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useCustomer } from "@/app/providers/customerProvider";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { customer, loading } = useCustomer();
+
+  const accountLabel = loading
+    ? "..."
+    : customer
+      ? customer.first_name || customer.email.split("@")[0]
+      : "Login";
 
   return (
     <header className="site-header">
@@ -25,6 +33,13 @@ export default function Header() {
       </nav>
 
       <div className="header-right">
+        <Link
+          href={customer ? "/account" : "/login"}
+          className="account-link"
+          onClick={() => setMenuOpen(false)}
+        >
+          {accountLabel}
+        </Link>
         <Link href="/cart" className="cart-link">
           Cart
         </Link>
