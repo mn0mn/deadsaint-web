@@ -75,7 +75,7 @@ export default function AccountPage() {
         ))}
       </nav>
 
-      <main className="account-content">
+      <section className="account-content">
         {activeTab === "orders" && (
           <section>
             <div className="account-section-heading">
@@ -145,7 +145,7 @@ export default function AccountPage() {
             </div>
           </section>
         )}
-      </main>
+      </section>
 
       <footer className="account-footer">
         <p>THIS FILE IS PROPERTY OF DEADSAINT.<br />HANDLE WITH QUESTIONABLE CARE.</p>
