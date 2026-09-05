@@ -1,12 +1,15 @@
 import Medusa from "@medusajs/js-sdk";
 import type { HttpTypes } from "@medusajs/types";
-import { error } from "console";
 
 // One client, configured from env vars. Set these in .env.local —
 // see .env.example.
 export const medusa = new Medusa({
   baseUrl: process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL!,
   publishableKey: process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+  auth: {
+    // Cookie sessions are the recommended choice for a Next.js storefront.
+    type: "session",
+  },
 });
 
 // Medusa requires a region for pricing. Set this once you've created a
@@ -94,4 +97,3 @@ export async function removeFromCart(
 
   return parent;
 }
-
