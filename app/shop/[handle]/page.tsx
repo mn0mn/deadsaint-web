@@ -12,9 +12,19 @@ export default async function ProductPage({
 
   if (!product) notFound();
 
+  const image = product.thumbnail ?? product.images?.[0]?.url;
+
   return (
     <section className="product-detail">
-      <div className="product-detail-art" />
+      <div className="product-detail-art">
+        {image ? (
+          <img
+            src={image}
+            alt={product.title}
+            className="product-detail-image"
+          />
+        ) : null}
+      </div>
       <div>
         <h1>{product.title}</h1>
         <p>{product.description}</p>
