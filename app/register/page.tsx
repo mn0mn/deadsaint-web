@@ -1,21 +1,22 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import type { FormEvent } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { medusa } from "@/lib/medusa";
-import { useCustomer } from "@/app/providers/customerProvider";
-import "./register.css";
+import { useState } from 'react';
+import type { FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { medusa } from '@/lib/medusa';
+import { StoreCreateCustomer } from '@medusajs/types';
+import { useCustomer } from '@/app/providers/customerProvider';
+import './register.css';
 
 export default function RegisterPage() {
   const router = useRouter();
   const { refreshCustomer } = useCustomer();
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,13 +26,13 @@ export default function RegisterPage() {
     setError(null);
 
     try {
-      const result = await medusa.auth.register("customer", "emailpass", {
+      const result = await medusa.auth.register('customer', 'emailpass', {
         email,
         password,
       });
 
-      if (typeof result !== "string") {
-        setError("YOUR DEAD FILE NEEDS VERIFICATION BEFORE YOU CAN ENTER.");
+      if (typeof result !== 'string') {
+        setError('YOUR DEAD FILE NEEDS VERIFICATION BEFORE YOU CAN ENTER.');
         return;
       }
 
@@ -41,22 +42,23 @@ export default function RegisterPage() {
           first_name: firstName,
           last_name: lastName,
         },
+        {},
         {
           Authorization: `Bearer ${result}`,
-        }
+        },
       );
 
-      await medusa.auth.login("customer", "emailpass", {
+      await medusa.auth.login('customer', 'emailpass', {
         email,
         password,
       });
 
       await refreshCustomer();
-      router.push("/account");
+      router.push('/account');
       router.refresh();
     } catch (err) {
-      console.error("Registration failed:", err);
-      setError("COULD NOT CREATE YOUR DEAD FILE. CHECK YOUR DETAILS AND TRY AGAIN.");
+      console.error('Registration failed:', err);
+      setError('COULD NOT CREATE YOUR DEAD FILE. CHECK YOUR DETAILS AND TRY AGAIN.');
     } finally {
       setLoading(false);
     }
@@ -74,8 +76,10 @@ export default function RegisterPage() {
           <div>
             <p className="register-eyebrow">THE DEAD FILE</p>
             <h1>
-              JOIN<br />
-              THE<br />
+              JOIN
+              <br />
+              THE
+              <br />
               DEAD.
             </h1>
           </div>
@@ -90,10 +94,14 @@ export default function RegisterPage() {
       <section className="register-form-section">
         <div className="register-copy">
           <span className="register-section-index">01 /</span>
-          <h2>CREATE<br />YOUR FILE.</h2>
+          <h2>
+            CREATE
+            <br />
+            YOUR FILE.
+          </h2>
           <p>
-            Your DeadSaint account keeps your orders, details, and addresses in one place.
-            Pick a password and get yourself officially documented.
+            Your DeadSaint account keeps your orders, details, and addresses in one place. Pick a
+            password and get yourself officially documented.
           </p>
         </div>
 
@@ -154,7 +162,7 @@ export default function RegisterPage() {
           {error && <p className="register-error">☠ {error}</p>}
 
           <button type="submit" className="register-submit" disabled={loading}>
-            {loading ? "CREATING FILE..." : "CREATE MY DEAD FILE ↗"}
+            {loading ? 'CREATING FILE...' : 'CREATE MY DEAD FILE ↗'}
           </button>
 
           <div className="register-divider">
