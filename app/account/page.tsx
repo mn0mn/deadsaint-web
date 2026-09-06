@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import "./account.css";
+import { useCustomer } from "@/app/providers/customerProvider";
 
 type AccountTab = "orders" | "details" | "addresses" | "settings";
 
@@ -20,12 +21,26 @@ const tabs: { id: AccountTab; label: string }[] = [
 
 export default function AccountPage() {
   const [activeTab, setActiveTab] = useState<AccountTab>("orders");
+  const { customer, loading, logout } = useCustomer();
+
+  if (loading) {
+    return <div className="account-page">LOADING YOUR DEAD FILE...</div>;
+  }
+
+  if (!customer) {
+    return <div className="account-page">NO ACTIVE DEAD FILE FOUND.</div>;
+  }
+
+  const fullName = [customer.first_name, customer.last_name].filter(Boolean).join(" ") || "UNKNOWN SUBJECT";
+  const memberSince = customer.created_at
+    ? new Date(customer.created_at).getFullYear()
+    : "UNKNOWN";
 
   return (
     <div className="account-page">
       <section className="account-hero">
         <div className="account-kicker">
-          <span>FILE NO. DS-000001</span>
+          <span>FILE NO. {customer.id.slice(-6).toUpperCase()}</span>
           <span>CLASSIFIED / CUSTOMER</span>
         </div>
         <div className="account-title-row">
@@ -47,17 +62,17 @@ export default function AccountPage() {
         </div>
         <div className="account-identity">
           <p className="account-label">SUBJECT NAME</p>
-          <h2>JOHN DOE</h2>
-          <p className="account-email">john@example.com</p>
+          <h2>{fullName.toUpperCase()}</h2>
+          <p className="account-email">{customer.email}</p>
           <div className="account-meta">
-            <span><small>MEMBER SINCE</small>2026</span>
+            <span><small>MEMBER SINCE</small>{memberSince}</span>
             <span><small>ORDERS</small>03</span>
             <span><small>STATUS</small>ACTIVE</span>
           </div>
         </div>
         <div className="account-actions">
           <button type="button" onClick={() => setActiveTab("details")}>EDIT PROFILE ↗</button>
-          <button type="button">LOG OUT ↗</button>
+          <button type="button" onClick={() => void logout()}>LOG OUT ↗</button>
         </div>
       </section>
 
@@ -102,15 +117,15 @@ export default function AccountPage() {
             <div className="account-info-grid">
               <article className="account-info-card">
                 <span className="account-label">IDENTITY</span>
-                <h3>JOHN DOE</h3>
-                <p>john@example.com</p>
-                <p>+994 00 000 00 00</p>
+                <h3>{fullName.toUpperCase()}</h3>
+                <p>{customer.email}</p>
+                {customer.phone && <p>{customer.phone}</p>}
                 <button className="account-edit" type="button">EDIT DETAILS ↗</button>
               </article>
               <article className="account-info-card">
                 <span className="account-label">MEMBERSHIP</span>
                 <h3>DEADSAINT</h3>
-                <p>Member since: 2026</p>
+                <p>Member since: {memberSince}</p>
                 <p>Orders placed: 03</p>
                 <p>Account status: ACTIVE</p>
               </article>
@@ -122,14 +137,7 @@ export default function AccountPage() {
           <section>
             <div className="account-section-heading"><div><span className="account-section-index">03 /</span><h2>WHERE TO SEND THE DEAD</h2></div></div>
             <div className="account-address-list">
-              <article className="account-address">
-                <div>
-                  <span className="account-label">SHIPPING ADDRESS</span>
-                  <h3>HOME</h3>
-                  <p>JOHN DOE<br />42 DEAD END STREET<br />BAKU, AZ 1000<br />AZERBAIJAN</p>
-                </div>
-                <span className="account-address-badge">DEFAULT</span>
-              </article>
+              <p>NO SAVED ADDRESSES YET.</p>
               <button className="btn" type="button">+ ADD ADDRESS</button>
             </div>
           </section>
