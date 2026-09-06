@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
+import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { medusa } from "@/lib/medusa";
@@ -30,20 +31,24 @@ export default function RegisterPage() {
       });
 
       if (typeof result !== "string") {
-        if ("verification_required" in result && result.verification_required) {
-          setError("CHECK YOUR EMAIL TO VERIFY YOUR DEAD FILE, THEN LOG IN.");
-          return;
-        }
-
-        if ("location" in result && result.location) {
-          setError("YOUR DEAD FILE NEEDS VERIFICATION BEFORE YOU CAN ENTER.");
-          return;
-        }
+        setError("YOUR DEAD FILE NEEDS VERIFICATION BEFORE YOU CAN ENTER.");
+        return;
       }
 
-      await medusa.store.customer.create({
-        first_name: firstName,
-        last_name: lastName,
+      await medusa.store.customer.create(
+        {
+          email,
+          first_name: firstName,
+          last_name: lastName,
+        },
+        {
+          Authorization: `Bearer ${result}`,
+        }
+      );
+
+      await medusa.auth.login("customer", "emailpass", {
+        email,
+        password,
       });
 
       await refreshCustomer();
