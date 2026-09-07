@@ -1,7 +1,6 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import { getAllProducts } from "@/lib/medusa";
-import "./shop.css";
 
 const categories = [
   {
