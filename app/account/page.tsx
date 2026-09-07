@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import "./account.css";
 import { useCustomer } from "@/app/providers/customerProvider";
 
@@ -20,15 +21,27 @@ const tabs: { id: AccountTab; label: string }[] = [
 ];
 
 export default function AccountPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<AccountTab>("orders");
   const { customer, loading, logout } = useCustomer();
+
+  useEffect(() => {
+    if (!loading && !customer) {
+      router.replace("/login");
+    }
+  }, [loading, customer, router]);
+
+  async function handleLogout() {
+    await logout();
+    router.replace("/");
+  }
 
   if (loading) {
     return <div className="account-page">LOADING YOUR DEAD FILE...</div>;
   }
 
   if (!customer) {
-    return <div className="account-page">NO ACTIVE DEAD FILE FOUND.</div>;
+    return null;
   }
 
   const fullName = [customer.first_name, customer.last_name].filter(Boolean).join(" ") || "UNKNOWN SUBJECT";
@@ -72,7 +85,7 @@ export default function AccountPage() {
         </div>
         <div className="account-actions">
           <button type="button" onClick={() => setActiveTab("details")}>EDIT PROFILE ↗</button>
-          <button type="button" onClick={() => void logout()}>LOG OUT ↗</button>
+          <button type="button" onClick={() => void handleLogout()}>LOG OUT ↗</button>
         </div>
       </section>
 
