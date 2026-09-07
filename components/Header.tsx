@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useCustomer } from "@/app/providers/customerProvider";
 
@@ -16,8 +17,14 @@ export default function Header() {
 
   return (
     <header className="site-header">
-      <Link href="/" className="logo" onClick={() => setMenuOpen(false)}>
-        DEAD<span>SAINT</span>
+      <Link href="/" className="logo" onClick={() => setMenuOpen(false)} aria-label="Deadsaint home">
+        <Image
+          src="/deadsaint_E_master.svg"
+          alt="Deadsaint"
+          width={358}
+          height={298}
+          priority
+        />
       </Link>
 
       <nav className={menuOpen ? "nav-open" : ""}>
