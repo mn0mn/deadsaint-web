@@ -30,9 +30,23 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 5vw;
+  padding: 14px 5vw;
   background: var(--ink);
   color: var(--paper);
+}
+
+.site-header .logo {
+  display: block;
+  width: 54px;
+  height: 45px;
+  flex: 0 0 auto;
+}
+
+.site-header .logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .site-header nav {
@@ -79,10 +93,6 @@ a {
 
 .menu-toggle.is-open span:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
-}
-
-.site-header .logo span {
-  color: var(--blood);
 }
 
 .btn {
