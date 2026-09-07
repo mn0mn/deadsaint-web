@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getProductByHandle } from "@/lib/medusa";
-import { formatPrice } from "@/lib/format";
+import ProductDetail from "@/components/ProductDetail";
 
 export default async function ProductPage({
   params,
@@ -12,46 +12,20 @@ export default async function ProductPage({
 
   if (!product) notFound();
 
-  const image = product.thumbnail ?? product.images?.[0]?.url;
+  const images = Array.from(
+    new Set(
+      [product.thumbnail, ...(product.images ?? []).map((image) => image.url)].filter(
+        (url): url is string => Boolean(url),
+      ),
+    ),
+  );
 
   return (
-    <section className="product-detail">
-      <div className="product-detail-art">
-        {image ? (
-          <img
-            src={image}
-            alt={product.title}
-            className="product-detail-image"
-          />
-        ) : null}
-      </div>
-      <div>
-        <h1>{product.title}</h1>
-        <p>{product.description}</p>
-
-        <div className="variant-list">
-          {(product.variants ?? []).map((variant) => {
-            const inStock =
-              !variant.manage_inventory || (variant.inventory_quantity ?? 0) > 0;
-            return (
-              <div className="variant-row" key={variant.id}>
-                <div>
-                  <span className="variant-title">{variant.title}</span>
-                  <span className="price">
-                    {formatPrice(
-                      variant.calculated_price?.calculated_amount ?? 0,
-                      variant.calculated_price?.currency_code ?? "usd"
-                    )}
-                  </span>
-                </div>
-                <button disabled={!inStock} className="btn">
-                  {inStock ? "Add to cart" : "Sold out"}
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
+    <ProductDetail
+      title={product.title}
+      description={product.description}
+      images={images}
+      variants={product.variants ?? []}
+    />
   );
 }
