@@ -1,0 +1,32 @@
+.card {
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+
+.art {
+  aspect-ratio: 1;
+  background: var(--ink);
+  overflow: hidden;
+}
+
+.image,
+.placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.image {
+  object-fit: contain;
+  object-position: center;
+}
+
+.placeholder {
+  background: var(--ink);
+}
+
+.price {
+  color: var(--blood);
+  font-weight: bold;
+}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import styles from "./About.module.css";
 
 const CODE = [
   {
@@ -21,8 +22,8 @@ const CODE = [
 export default function AboutPage() {
   return (
     <>
-      <section className="about-hero">
-        <span className="eyebrow">// The Manifesto //</span>
+      <section className={styles.hero}>
+        <span className={styles.eyebrow}>// The Manifesto //</span>
         <h1>
           We don&apos;t design trends.
           <br />
@@ -30,8 +31,8 @@ export default function AboutPage() {
         </h1>
       </section>
 
-      <section className="about-body">
-        <div className="about-copy">
+      <section className={styles.body}>
+        <div className={styles.copy}>
           <p>
             Deadsaint started in a garage with a screen press and a stack of
             old band tees nobody else wanted. No investors, no business plan —
@@ -49,20 +50,20 @@ export default function AboutPage() {
           </Link>
         </div>
 
-        <div className="patch">
-          <div className="patch-inner">
+        <div className={styles.patch}>
+          <div className={styles.patchInner}>
             <span>Sworn to</span>
             <strong>Loud</strong>
           </div>
         </div>
       </section>
 
-      <section className="the-code">
+      <section className={styles.code}>
         <h2>The Code</h2>
-        <div className="code-grid">
+        <div className={styles.codeGrid}>
           {CODE.map((item) => (
-            <div className="code-item" key={item.n}>
-              <span className="code-n">{item.n}</span>
+            <div className={styles.codeItem} key={item.n}>
+              <span className={styles.codeN}>{item.n}</span>
               <h3>{item.title}</h3>
               <p>{item.body}</p>
             </div>

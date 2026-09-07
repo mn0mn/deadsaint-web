@@ -1,0 +1,465 @@
+.page,
+.page * {
+  min-width: 0;
+}
+
+.page {
+  overflow: hidden;
+}
+
+.hero {
+  position: relative;
+  padding: clamp(70px, 10vw, 130px) 5vw 90px;
+  border-bottom: 4px solid var(--ink);
+  background: var(--paper);
+}
+
+.hero::after {
+  content: "DEAD / ALIVE";
+  position: absolute;
+  right: 5vw;
+  bottom: 28px;
+  font-family: monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  transform: rotate(-5deg);
+  color: var(--blood);
+}
+
+.eyebrow,
+.label {
+  display: block;
+  font-family: monospace;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  color: var(--blood);
+  margin-bottom: 18px;
+}
+
+.hero h1 {
+  margin: 0;
+  max-width: 900px;
+  font-size: clamp(4rem, 12vw, 10rem);
+  line-height: 0.78;
+  letter-spacing: -0.075em;
+  text-transform: uppercase;
+}
+
+.hero p {
+  max-width: 620px;
+  margin: 38px 0 0;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.6;
+}
+
+.tape {
+  display: flex;
+  overflow: hidden;
+  gap: 34px;
+  padding: 11px 5vw;
+  background: var(--highlighter);
+  color: var(--ink);
+  border-bottom: 3px solid var(--ink);
+  font-family: monospace;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.tape span::before {
+  content: "✦";
+  margin-right: 34px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
+  gap: 28px;
+  padding: 48px 5vw 80px;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.main,
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.card,
+.mapCard,
+.note {
+  max-width: 100%;
+  overflow: hidden;
+  border: 3px solid var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+}
+
+.card {
+  padding: clamp(28px, 4vw, 52px);
+}
+
+.cardDark {
+  background: var(--ink);
+  color: var(--paper);
+  transform: rotate(-0.5deg);
+}
+
+.cardRed {
+  background: var(--blood);
+  color: var(--paper);
+  transform: rotate(0.6deg);
+}
+
+.cardLight {
+  background: var(--paper);
+}
+
+.card h2,
+.mapCard h2 {
+  margin: 18px 0 12px;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.card p {
+  max-width: 650px;
+  line-height: 1.65;
+}
+
+.bigLink {
+  display: inline-block;
+  margin-top: 24px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--blood);
+  font-family: monospace;
+  font-size: clamp(1rem, 2.2vw, 1.4rem);
+  font-weight: 800;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.cardRed .label {
+  color: var(--highlighter);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin-top: 34px;
+  background: var(--paper);
+  border: 1px solid var(--paper);
+}
+
+.stats div {
+  min-width: 0;
+  min-height: 120px;
+  padding: 18px;
+  background: var(--blood);
+}
+
+.stats strong,
+.stats span {
+  display: block;
+  font-family: monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.stats strong {
+  color: var(--highlighter);
+  margin-bottom: 12px;
+}
+
+.stats span {
+  line-height: 1.5;
+}
+
+.socialLinks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.socialLinks a {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px;
+  border: 2px solid var(--ink);
+  font-family: monospace;
+  font-weight: 800;
+  text-decoration: none;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.socialLinks a:hover {
+  background: var(--ink);
+  color: var(--paper);
+  transform: translate(-3px, -3px);
+}
+
+.mapCard {
+  padding: 22px;
+  background: var(--paper);
+}
+
+.mapHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.mapHeading h2 {
+  margin-bottom: 0;
+}
+
+.mapCoords {
+  font-family: monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow-wrap: anywhere;
+}
+
+.mapFrame {
+  position: relative;
+  min-height: 430px;
+  overflow: hidden;
+  background: var(--ink);
+  border: 3px solid var(--ink);
+}
+
+.mapFrame iframe {
+  display: block;
+  width: 100%;
+  height: 430px;
+  border: 0;
+  filter: grayscale(1) contrast(1.1);
+}
+
+.mapStamp {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  display: grid;
+  width: 66px;
+  height: 66px;
+  place-items: center;
+  border: 4px solid var(--blood);
+  color: var(--blood);
+  font-family: monospace;
+  font-size: 1.6rem;
+  font-weight: 900;
+  transform: rotate(8deg);
+  pointer-events: none;
+  background: rgba(231, 226, 210, 0.85);
+}
+
+.mapNote {
+  margin: 16px 0 0;
+  color: var(--gray);
+  font-family: monospace;
+  font-size: 0.72rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.note {
+  padding: 28px;
+  background: var(--highlighter);
+  transform: rotate(-1deg);
+}
+
+.note p {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 24px 5vw;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: monospace;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 820px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero {
+    padding: 56px 18px 68px;
+  }
+
+  .hero h1 {
+    font-size: clamp(3.25rem, 17vw, 5.5rem);
+  }
+
+  .hero p {
+    font-size: 0.95rem;
+  }
+
+  .hero p br {
+    display: none;
+  }
+
+  .tape {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+    padding: 28px 18px 58px;
+  }
+
+  .main,
+  .side {
+    gap: 22px;
+  }
+
+  .card {
+    padding: 24px 18px;
+    transform: none;
+  }
+
+  .card h2,
+  .mapCard h2 {
+    font-size: clamp(1.65rem, 9vw, 2.5rem);
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .stats div {
+    min-height: auto;
+    padding: 16px;
+  }
+
+  .socialLinks {
+    grid-template-columns: 1fr;
+  }
+
+  .socialLinks a {
+    padding: 16px;
+  }
+
+  .mapCard {
+    padding: 18px;
+  }
+
+  .mapHeading {
+    display: block;
+  }
+
+  .mapCoords {
+    display: block;
+    margin-top: 10px;
+    white-space: normal;
+  }
+
+  .mapFrame,
+  .mapFrame iframe {
+    min-height: 300px;
+    height: 300px;
+  }
+
+  .note {
+    padding: 22px 18px;
+  }
+
+  .bottom {
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px;
+  }
+}
+
+@media (max-width: 375px) {
+  .hero {
+    padding: 48px 14px 60px;
+  }
+
+  .hero h1 {
+    font-size: 3.05rem;
+    letter-spacing: -0.07em;
+  }
+
+  .grid {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .card,
+  .mapCard,
+  .note {
+    border-width: 2px;
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  .card {
+    padding: 21px 14px;
+  }
+
+  .label {
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+  }
+
+  .bigLink {
+    font-size: 0.86rem;
+  }
+
+  .stats strong,
+  .stats span {
+    font-size: 0.67rem;
+  }
+
+  .mapCard {
+    padding: 14px;
+  }
+
+  .mapFrame,
+  .mapFrame iframe {
+    height: 255px;
+    min-height: 255px;
+  }
+
+  .bottom {
+    font-size: 0.6rem;
+  }
+}
