@@ -40,88 +40,95 @@ export default function LoginPage() {
 
   return (
     <div className="login-page">
-      <section className="login-hero">
+      <section className="login-shell" aria-labelledby="login-title">
         <div className="login-kicker">
           <span>DEADSAINT // CUSTOMER ACCESS</span>
           <span>AUTHORIZATION REQUIRED</span>
         </div>
 
-        <div className="login-title-row">
-          <div>
-            <p className="login-eyebrow">THE DEAD FILE</p>
-            <h1>
+        <div className="login-main">
+          <div className="login-identity">
+            <div className="login-identity-top">
+              <p className="login-eyebrow">THE DEAD FILE</p>
+              <span className="login-section-index">01 / ACCESS</span>
+            </div>
+
+            <h1 id="login-title">
               COME<br />
               BACK<br />
               DEAD.
             </h1>
+
+            <div className="login-identity-bottom">
+              <p>RETURNING CUSTOMERS ONLY.</p>
+              <div className="login-stamp" aria-label="Entry restricted">
+                <span>ENTRY</span>
+                <strong>RESTRICTED</strong>
+              </div>
+            </div>
           </div>
 
-          <div className="login-stamp">
-            <span>ENTRY</span>
-            <strong>RESTRICTED</strong>
+          <div className="login-access">
+            <div className="login-copy">
+              <span className="login-copy-label">CUSTOMER ACCESS</span>
+              <h2>WELCOME<br />BACK.</h2>
+              <p>
+                Enter the credentials attached to your DeadSaint record.
+                No resurrection papers required.
+              </p>
+            </div>
+
+            <form className="login-form" onSubmit={handleSubmit}>
+              <label>
+                <span>EMAIL ADDRESS</span>
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="you@deadsaint.com"
+                  autoComplete="email"
+                  required
+                />
+              </label>
+
+              <label>
+                <span>PASSWORD</span>
+                <input
+                  type="password"
+                  name="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="••••••••••••"
+                  autoComplete="current-password"
+                  required
+                />
+              </label>
+
+              {error && <p className="login-error">☠ {error}</p>}
+
+              <button type="submit" className="login-submit" disabled={loading}>
+                {loading ? "CHECKING RECORD..." : "ENTER THE DEAD ↗"}
+              </button>
+
+              <div className="login-divider">
+                <span />
+                <small>NOT ONE OF US YET?</small>
+                <span />
+              </div>
+
+              <Link href="/register" className="login-register">
+                CREATE A DEAD FILE ↗
+              </Link>
+            </form>
           </div>
         </div>
+
+        <footer className="login-footer">
+          <span>ACCESS LOGGED // DEADSAINT HQ</span>
+          <strong>☠ KEEP THE DEAD ALIVE ☠</strong>
+        </footer>
       </section>
-
-      <section className="login-form-section">
-        <div className="login-copy">
-          <span className="login-section-index">01 /</span>
-          <h2>IDENTIFY<br />YOURSELF.</h2>
-          <p>
-            Enter the credentials attached to your DeadSaint record.
-            No resurrection papers required.
-          </p>
-        </div>
-
-        <form className="login-form" onSubmit={handleSubmit}>
-          <label>
-            <span>EMAIL ADDRESS</span>
-            <input
-              type="email"
-              name="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="you@deadsaint.com"
-              autoComplete="email"
-              required
-            />
-          </label>
-
-          <label>
-            <span>PASSWORD</span>
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder="••••••••••••"
-              autoComplete="current-password"
-              required
-            />
-          </label>
-
-          {error && <p className="login-error">☠ {error}</p>}
-
-          <button type="submit" className="login-submit" disabled={loading}>
-            {loading ? "CHECKING RECORD..." : "ENTER THE DEAD ↗"}
-          </button>
-
-          <div className="login-divider">
-            <span />
-            <small>NOT ONE OF US YET?</small>
-            <span />
-          </div>
-
-          <Link href="/register" className="login-register">
-            CREATE A DEAD FILE ↗
-          </Link>
-        </form>
-      </section>
-
-      <footer className="login-footer">
-        <span>ACCESS LOGGED // DEADSAINT HQ</span>
-        <strong>☠ KEEP THE DEAD ALIVE ☠</strong>
-      </footer>
     </div>
   );
 }
