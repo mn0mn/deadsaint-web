@@ -1,9 +1,12 @@
 :root {
   --paper: #e7e2d2;
   --ink: #0b0b0b;
-  --blood: #a81326;
+  --noir: #0b0a09;
+  --blood: #8e171d;
   --highlighter: #e3d400;
   --gray: #66645a;
+  --ash: #918a80;
+  --bone: #e8e1d3;
 }
 
 * {
@@ -27,18 +30,26 @@ a {
 }
 
 .site-header {
+  display: grid;
+  grid-template-columns: minmax(250px, 1fr) auto minmax(250px, 1fr);
+  align-items: center;
+  min-height: 100px;
+  padding: 16px 5vw;
+  background: var(--noir);
+  color: var(--bone);
+  border-bottom: 1px solid rgba(232, 225, 211, 0.12);
+}
+
+.header-brand {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 14px 5vw;
-  background: var(--ink);
-  color: var(--paper);
+  min-width: 0;
 }
 
 .site-header .logo {
   display: block;
-  width: 54px;
-  height: 45px;
+  width: 58px;
+  height: 51px;
   flex: 0 0 auto;
 }
 
@@ -49,15 +60,82 @@ a {
   object-fit: contain;
 }
 
+.brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-left: 14px;
+  white-space: nowrap;
+}
+
+.brand-name {
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: 1.08rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+}
+
+.brand-tagline {
+  color: var(--ash);
+  font-family: monospace;
+  font-size: 0.58rem;
+  line-height: 1;
+  letter-spacing: 0.12em;
+}
+
+.brand-divider {
+  width: 1px;
+  height: 34px;
+  margin-left: 22px;
+  background: rgba(232, 225, 211, 0.18);
+}
+
 .site-header nav {
   display: flex;
-  gap: 24px;
+  align-items: center;
+  gap: 34px;
+  justify-self: center;
+}
+
+.site-header nav a,
+.header-right a {
+  position: relative;
+  color: var(--bone);
+  text-decoration: none;
+  font-family: monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.site-header nav a::after,
+.account-link::after,
+.cart-link::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -7px;
+  left: 0;
+  height: 1px;
+  background: var(--blood);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.2s ease;
+}
+
+.site-header nav a:hover::after,
+.account-link:hover::after,
+.cart-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-self: end;
+  gap: 24px;
 }
 
 .menu-toggle {
@@ -78,7 +156,7 @@ a {
   display: block;
   width: 22px;
   height: 2px;
-  background: var(--paper);
+  background: var(--bone);
   border-radius: 1px;
   transition: transform 0.25s ease, opacity 0.2s ease;
 }
@@ -119,9 +197,47 @@ a {
   text-align: center;
 }
 
+@media (max-width: 980px) {
+  .site-header {
+    grid-template-columns: 1fr auto;
+  }
+
+  .site-header nav {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .header-right {
+    gap: 18px;
+  }
+}
+
 @media (max-width: 760px) {
   .site-header {
     position: relative;
+    min-height: 78px;
+    padding: 12px 5vw;
+  }
+
+  .site-header .logo {
+    width: 48px;
+    height: 42px;
+  }
+
+  .brand-copy {
+    margin-left: 10px;
+  }
+
+  .brand-name {
+    font-size: 0.9rem;
+  }
+
+  .brand-tagline,
+  .brand-divider {
+    display: none;
   }
 
   .site-header nav {
@@ -129,9 +245,12 @@ a {
     top: 100%;
     left: 0;
     right: 0;
+    display: flex;
+    align-items: stretch;
     flex-direction: column;
     gap: 0;
-    background: var(--ink);
+    justify-self: auto;
+    background: var(--noir);
     border-top: 1px solid var(--blood);
     max-height: 0;
     overflow: hidden;
@@ -148,22 +267,35 @@ a {
 
   .site-header nav a {
     padding: 14px 0;
-    font-family: monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.9rem;
-    border-bottom: 1px solid rgba(231, 226, 210, 0.12);
+    font-size: 0.78rem;
+    border-bottom: 1px solid rgba(232, 225, 211, 0.12);
   }
 
   .site-header nav a:last-child {
     border-bottom: none;
   }
 
-  .site-header nav a:hover {
-    color: var(--blood);
+  .site-header nav a::after {
+    display: none;
   }
 
-  .menu-toggle {
-    display: flex;
+  .header-right {
+    gap: 12px;
+  }
+
+  .header-right a {
+    font-size: 0.64rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-link {
+    max-width: 78px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cart-link {
+    display: none;
   }
 }

@@ -17,15 +17,22 @@ export default function Header() {
 
   return (
     <header className="site-header">
-      <Link href="/" className="logo" onClick={() => setMenuOpen(false)} aria-label="Deadsaint home">
-        <Image
-          src="/deadsaint_E_master.svg"
-          alt="Deadsaint"
-          width={358}
-          height={298}
-          priority
-        />
-      </Link>
+      <div className="header-brand">
+        <Link href="/" className="logo" onClick={() => setMenuOpen(false)} aria-label="Deadsaint home">
+          <Image
+            src="/deadsaint_E_master.svg"
+            alt="Deadsaint"
+            width={358}
+            height={298}
+            priority
+          />
+        </Link>
+        <div className="brand-copy" aria-hidden="true">
+          <span className="brand-name">DEADSAINT</span>
+          <span className="brand-tagline">PUNK &amp; METAL FASHION</span>
+        </div>
+        <span className="brand-divider" aria-hidden="true" />
+      </div>
 
       <nav className={menuOpen ? "nav-open" : ""}>
         <Link href="/shop" onClick={() => setMenuOpen(false)}>
@@ -47,7 +54,7 @@ export default function Header() {
         >
           {accountLabel}
         </Link>
-        <Link href="/cart" className="cart-link">
+        <Link href="/cart" className="cart-link" onClick={() => setMenuOpen(false)}>
           Cart
         </Link>
         <button
