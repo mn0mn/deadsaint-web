@@ -1,9 +1,7 @@
 import Medusa from "@medusajs/js-sdk";
 import type { HttpTypes } from "@medusajs/types";
 
-function requiredEnv(name: string): string {
-  const value = process.env[name];
-
+function requiredEnv(value: string | undefined, name: string): string {
   if (!value) {
     throw new Error(
       `Missing required environment variable: ${name}. Check your .env.local file.`
@@ -15,8 +13,16 @@ function requiredEnv(name: string): string {
 
 // One client, configured from env vars. Set these in .env.local —
 // see .env.example.
-const BACKEND_URL = requiredEnv("NEXT_PUBLIC_MEDUSA_BACKEND_URL");
-const REGION_ID = requiredEnv("NEXT_PUBLIC_MEDUSA_REGION_ID");
+// Keep NEXT_PUBLIC_* references direct so Next.js can inline them into the
+// browser bundle. Dynamic process.env[name] lookups are not inlined by Next.js.
+const BACKEND_URL = requiredEnv(
+  process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL,
+  "NEXT_PUBLIC_MEDUSA_BACKEND_URL"
+);
+const REGION_ID = requiredEnv(
+  process.env.NEXT_PUBLIC_MEDUSA_REGION_ID,
+  "NEXT_PUBLIC_MEDUSA_REGION_ID"
+);
 
 export const medusa = new Medusa({
   baseUrl: BACKEND_URL,
