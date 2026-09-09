@@ -21,7 +21,7 @@ export type MedusaProduct = HttpTypes.StoreProduct;
 export async function getAllProducts(): Promise<MedusaProduct[]> {
   const { products } = await medusa.store.product.list({
     region_id: REGION_ID,
-    fields: "*variants.calculated_price",
+    fields: "*variants.calculated_price,+variants.inventory_quantity",
   });
   return products;
 }
@@ -32,7 +32,7 @@ export async function getProductByHandle(
   const { products } = await medusa.store.product.list({
     handle,
     region_id: REGION_ID,
-    fields: "*variants.calculated_price",
+    fields: "*variants.calculated_price,+variants.inventory_quantity",
   });
   return products[0];
 }
