@@ -1,20 +1,31 @@
 import Medusa from "@medusajs/js-sdk";
 import type { HttpTypes } from "@medusajs/types";
 
+function requiredEnv(name: string): string {
+  const value = process.env[name];
+
+  if (!value) {
+    throw new Error(
+      `Missing required environment variable: ${name}. Check your .env.local file.`
+    );
+  }
+
+  return value;
+}
+
 // One client, configured from env vars. Set these in .env.local —
 // see .env.example.
+const BACKEND_URL = requiredEnv("NEXT_PUBLIC_MEDUSA_BACKEND_URL");
+const REGION_ID = requiredEnv("NEXT_PUBLIC_MEDUSA_REGION_ID");
+
 export const medusa = new Medusa({
-  baseUrl: process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL!,
+  baseUrl: BACKEND_URL,
   publishableKey: process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
   auth: {
     // Cookie sessions are the recommended choice for a Next.js storefront.
     type: "session",
   },
 });
-
-// Medusa requires a region for pricing. Set this once you've created a
-// region in the Medusa Admin and grab its ID from there.
-const REGION_ID = process.env.NEXT_PUBLIC_MEDUSA_REGION_ID!;
 
 export type MedusaProduct = HttpTypes.StoreProduct;
 
