@@ -3,15 +3,19 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import "./account.css";
+import { medusa } from "@/lib/medusa";
 import { useCustomer } from "@/app/providers/customerProvider";
 
 type AccountTab = "orders" | "details" | "addresses" | "settings";
 
-const orders = [
-  { id: "#DS-00031", date: "SEP 02, 2026", item: "BLACK SAINT TEE", price: "$42.00", status: "DELIVERED" },
-  { id: "#DS-00028", date: "AUG 24, 2026", item: "DEAD RELIGION HOODIE", price: "$89.00", status: "SHIPPED" },
-  { id: "#DS-00019", date: "AUG 11, 2026", item: "SAINTS & SINNERS CAP", price: "$31.00", status: "DELIVERED" },
-];
+type AccountOrder = {
+  id: string;
+  created_at?: string;
+  total?: number;
+  currency_code?: string;
+  status?: string;
+  items?: Array<{ title?: string }>;
+};
 
 const tabs: { id: AccountTab; label: string }[] = [
   { id: "orders", label: "ORDERS" },
@@ -20,9 +24,34 @@ const tabs: { id: AccountTab; label: string }[] = [
   { id: "settings", label: "SETTINGS" },
 ];
 
+function formatDate(date?: string) {
+  if (!date) return "UNKNOWN";
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  }).toUpperCase().replace(/,/g, "");
+}
+
+function formatTotal(total?: number, currencyCode = "USD") {
+  if (typeof total !== "number") return "--";
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currencyCode.toUpperCase(),
+  }).format(total / 100);
+}
+
+function displayStatus(status?: string) {
+  if (!status) return "PROCESSING";
+  return status.replace(/_/g, " ").toUpperCase();
+}
+
 export default function AccountPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<AccountTab>("orders");
+  const [orders, setOrders] = useState<AccountOrder[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState(true);
+  const [ordersError, setOrdersError] = useState(false);
   const { customer, loading, logout } = useCustomer();
 
   useEffect(() => {
@@ -30,6 +59,44 @@ export default function AccountPage() {
       router.replace("/login");
     }
   }, [loading, customer, router]);
+
+  useEffect(() => {
+    if (!customer) return;
+
+    let cancelled = false;
+
+    async function loadOrders() {
+      setOrdersLoading(true);
+      setOrdersError(false);
+
+      try {
+        const response = await medusa.store.order.list({
+          customer_id: customer.id,
+          limit: 50,
+          order: "-created_at",
+        });
+
+        if (!cancelled) {
+          setOrders(response.orders as AccountOrder[]);
+        }
+      } catch (error) {
+        console.error("Failed to load customer orders:", error);
+        if (!cancelled) {
+          setOrdersError(true);
+        }
+      } finally {
+        if (!cancelled) {
+          setOrdersLoading(false);
+        }
+      }
+    }
+
+    void loadOrders();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [customer]);
 
   async function handleLogout() {
     await logout();
@@ -48,6 +115,7 @@ export default function AccountPage() {
   const memberSince = customer.created_at
     ? new Date(customer.created_at).getFullYear()
     : "UNKNOWN";
+  const orderCount = orders.length;
 
   return (
     <div className="account-page">
@@ -79,7 +147,7 @@ export default function AccountPage() {
           <p className="account-email">{customer.email}</p>
           <div className="account-meta">
             <span><small>MEMBER SINCE</small>{memberSince}</span>
-            <span><small>ORDERS</small>03</span>
+            <span><small>ORDERS</small>{orderCount.toString().padStart(2, "0")}</span>
             <span><small>STATUS</small>ACTIVE</span>
           </div>
         </div>
@@ -98,7 +166,7 @@ export default function AccountPage() {
             onClick={() => setActiveTab(tab.id)}
             aria-current={activeTab === tab.id ? "page" : undefined}
           >
-            {tab.label}{tab.id === "orders" && <span>03</span>}
+            {tab.label}{tab.id === "orders" && <span>{orderCount.toString().padStart(2, "0")}</span>}
           </button>
         ))}
       </nav>
@@ -110,17 +178,34 @@ export default function AccountPage() {
               <div><span className="account-section-index">01 /</span><h2>RECENT ACTIVITY</h2></div>
               <span className="account-section-note">NO SECRETS. PROBABLY.</span>
             </div>
-            <div className="account-orders">
-              {orders.map((order) => (
-                <div className="account-order" key={order.id}>
-                  <div><small>ORDER</small><strong>{order.id}</strong></div>
-                  <div><small>DATE</small><span>{order.date}</span></div>
-                  <div className="account-order-item"><small>ITEM</small><strong>{order.item}</strong></div>
-                  <div><small>TOTAL</small><span>{order.price}</span></div>
-                  <div className={`account-order-status ${order.status.toLowerCase()}`}>{order.status}</div>
-                </div>
-              ))}
-            </div>
+
+            {ordersLoading ? (
+              <div className="account-address-list"><p>RETRIEVING YOUR RECORDS...</p></div>
+            ) : ordersError ? (
+              <div className="account-address-list"><p>UNABLE TO RETRIEVE ORDER RECORDS.</p></div>
+            ) : orders.length === 0 ? (
+              <div className="account-address-list">
+                <p>NO ORDERS IN THE FILE YET.</p>
+                <button className="btn" type="button" onClick={() => router.push("/shop")}>ENTER THE SHOP ↗</button>
+              </div>
+            ) : (
+              <div className="account-orders">
+                {orders.map((order) => {
+                  const itemTitle = order.items?.[0]?.title || "ORDER CONTENTS";
+                  const status = displayStatus(order.status);
+
+                  return (
+                    <div className="account-order" key={order.id}>
+                      <div><small>ORDER</small><strong>#{order.id.replace(/^order_/, "").slice(-8).toUpperCase()}</strong></div>
+                      <div><small>DATE</small><span>{formatDate(order.created_at)}</span></div>
+                      <div className="account-order-item"><small>ITEM</small><strong>{itemTitle.toUpperCase()}</strong></div>
+                      <div><small>TOTAL</small><span>{formatTotal(order.total, order.currency_code)}</span></div>
+                      <div className={`account-order-status ${status.toLowerCase().replace(/\s+/g, "-")}`}>{status}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </section>
         )}
 
@@ -139,7 +224,7 @@ export default function AccountPage() {
                 <span className="account-label">MEMBERSHIP</span>
                 <h3>DEADSAINT</h3>
                 <p>Member since: {memberSince}</p>
-                <p>Orders placed: 03</p>
+                <p>Orders placed: {orderCount.toString().padStart(2, "0")}</p>
                 <p>Account status: ACTIVE</p>
               </article>
             </div>
