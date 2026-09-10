@@ -1,73 +1,40 @@
 import Link from "next/link";
 import styles from "./About.module.css";
+import { cookies } from "next/headers";
+import { DEFAULT_LOCALE, getMessages, isLocale } from "@/lib/i18n";
 
-const CODE = [
-  {
-    n: "01",
-    title: "Small batch, no restocks",
-    body: "When it's gone, it's gone. We'd rather sell out than flood landfills with leftover stock nobody wanted.",
-  },
-  {
-    n: "02",
-    title: "Built to survive the pit",
-    body: "Heavyweight fabric, reinforced seams, patch-ready panels. If it can't take a beating, it doesn't ship.",
-  },
-  {
-    n: "03",
-    title: "DIY, not corporate",
-    body: "No focus groups. No trend chasing. Just people who live in this scene making gear for people who live in it too.",
-  },
-];
+const CODE = ["01", "02", "03"] as const;
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const cookieStore = await cookies();
+  const rawLocale = cookieStore.get("deadsaint-locale")?.value;
+  const locale = isLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
+  const m = getMessages(locale).about;
+  const prefix = `/${locale}`;
+  const items = [
+    [CODE[0], m.code1Title, m.code1Body],
+    [CODE[1], m.code2Title, m.code2Body],
+    [CODE[2], m.code3Title, m.code3Body],
+  ];
+
   return (
     <>
       <section className={styles.hero}>
-        <span className={styles.eyebrow}>// The Manifesto //</span>
-        <h1>
-          We don&apos;t design trends.
-          <br />
-          We design battle scars.
-        </h1>
+        <span className={styles.eyebrow}>{m.eyebrow}</span>
+        <h1>{m.hero1}<br />{m.hero2}</h1>
       </section>
-
       <section className={styles.body}>
         <div className={styles.copy}>
-          <p>
-            Deadsaint started in a garage with a screen press and a stack of
-            old band tees nobody else wanted. No investors, no business plan —
-            just a spray bottle of bleach, a stack of stencils, and too much
-            time spent at shows watching people patch their jackets by hand.
-          </p>
-          <p>
-            Every patch, pin, and piece we put out is built for people who
-            wear their scene on their sleeve — literally. No fast fashion. No
-            throwaway drops. Just gear that survives the pit and looks better
-            for it.
-          </p>
-          <Link href="/shop" className="btn">
-            Shop the drop
-          </Link>
+          <p>{m.p1}</p>
+          <p>{m.p2}</p>
+          <Link href={`${prefix}/shop`} className="btn">{m.cta}</Link>
         </div>
-
-        <div className={styles.patch}>
-          <div className={styles.patchInner}>
-            <span>Sworn to</span>
-            <strong>Loud</strong>
-          </div>
-        </div>
+        <div className={styles.patch}><div className={styles.patchInner}><span>{m.patch1}</span><strong>{m.patch2}</strong></div></div>
       </section>
-
       <section className={styles.code}>
-        <h2>The Code</h2>
+        <h2>{m.code}</h2>
         <div className={styles.codeGrid}>
-          {CODE.map((item) => (
-            <div className={styles.codeItem} key={item.n}>
-              <span className={styles.codeN}>{item.n}</span>
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-            </div>
-          ))}
+          {items.map(([n, title, body]) => <div className={styles.codeItem} key={n}><span className={styles.codeN}>{n}</span><h3>{title}</h3><p>{body}</p></div>)}
         </div>
       </section>
     </>

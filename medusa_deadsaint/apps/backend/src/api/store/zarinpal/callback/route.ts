@@ -1,15 +1,11 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
-import { Modules } from "@medusajs/framework/utils"
-import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils"
 
 /**
  * ZarinPal redirects the customer here after payment.
- *
- * TODO: Set ZARINPAL_CALLBACK_URL to the public URL of this route, for example:
- * https://your-domain.com/store/zarinpal/callback
- *
- * The callback intentionally does not trust the gateway's query string as proof
- * of payment. The Medusa payment session must be verified server-to-server.
+ * The callback delegates payment-session authorization to Medusa's payment
+ * module so the provider's authorizePayment implementation remains the single
+ * source of truth for gateway verification.
  */
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const authority = String(req.query.Authority || "")
@@ -22,9 +18,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   }
 
   if (!sessionId) {
-    res.status(400).json({
-      error: "Missing payment session_id",
-    })
+    res.status(400).json({ error: "Missing payment session_id" })
     return
   }
 
@@ -33,7 +27,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
   const { data: sessions } = await query.graph({
     entity: "payment_session",
-    fields: ["id", "amount", "currency_code", "data", "payment_collection_id"],
+    fields: ["id", "data", "payment_collection_id"],
     filters: { id: sessionId },
   })
 
@@ -45,7 +39,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
   }
 
   try {
-    await paymentModuleService.authorizePayment(sessionId, {
+    await paymentModuleService.authorizePaymentSession(sessionId, {
       authority,
       ...(session.data || {}),
     })

@@ -1,6 +1,7 @@
 import {
   AbstractPaymentProvider,
   MedusaError,
+  PaymentActions,
 } from "@medusajs/framework/utils"
 import type {
   AuthorizePaymentInput,
@@ -16,12 +17,14 @@ import type {
   InitiatePaymentInput,
   InitiatePaymentOutput,
   PaymentSessionStatus,
+  ProviderWebhookPayload,
   RefundPaymentInput,
   RefundPaymentOutput,
   RetrievePaymentInput,
   RetrievePaymentOutput,
   UpdatePaymentInput,
   UpdatePaymentOutput,
+  WebhookActionResult,
 } from "@medusajs/framework/types"
 import { BigNumber } from "@medusajs/framework/utils"
 
@@ -72,7 +75,6 @@ class ZarinPalPaymentProviderService extends AbstractPaymentProvider<Options> {
   constructor(container: Record<string, unknown>, options: Options) {
     super(container, options)
     this.options_ = {
-      // TODO: Replace these values with the real ZarinPal merchant/gateway values.
       merchant_id: "TODO_ZARINPAL_MERCHANT_ID",
       callback_url: "TODO_ZARINPAL_CALLBACK_URL",
       base_url: "https://api.zarinpal.com",
@@ -82,8 +84,6 @@ class ZarinPalPaymentProviderService extends AbstractPaymentProvider<Options> {
   }
 
   static validateOptions(options: Record<string, unknown>): void | never {
-    // The gateway is not available yet, so these are intentionally optional for now.
-    // TODO: Make merchant_id and callback_url mandatory when the gateway is activated.
     void options
   }
 
@@ -146,27 +146,21 @@ class ZarinPalPaymentProviderService extends AbstractPaymentProvider<Options> {
     return json
   }
 
-  async initiatePayment(
-    input: InitiatePaymentInput
-  ): Promise<InitiatePaymentOutput> {
+  async initiatePayment(input: InitiatePaymentInput): Promise<InitiatePaymentOutput> {
     this.assertConfigured()
 
     const amount = new BigNumber(input.amount).numeric
     const currencyCode = input.currency_code.toLowerCase()
 
-    // ZarinPal's current REST API expects the transaction amount in Rial.
-    // Keep the conversion isolated here so the store's currency convention can
-    // be changed without touching the rest of the provider.
-    const amountInRial = amount
-
     const callback = new URL(this.callbackUrl)
-    if (input.data?.session_id) {
-      callback.searchParams.set("session_id", String(input.data.session_id))
+    const sessionId = input.data?.session_id
+    if (sessionId !== undefined && sessionId !== null) {
+      callback.searchParams.set("session_id", String(sessionId))
     }
 
     const result = await this.post("/pg/v4/payment/request.json", {
       merchant_id: this.merchantId,
-      amount: amountInRial,
+      amount,
       callback_url: callback.toString(),
       description: "DEADSAINT order payment",
       metadata: {},
@@ -181,134 +175,119 @@ class ZarinPalPaymentProviderService extends AbstractPaymentProvider<Options> {
       )
     }
 
-    const paymentUrl = `${this.startPayUrl}/${data.authority}`
-
     return {
       id: data.authority,
       data: {
         authority: data.authority,
-        amount: amountInRial,
+        amount,
         currency_code: currencyCode,
-        payment_url: paymentUrl,
+        payment_url: `${this.startPayUrl}/${data.authority}`,
         status: "pending",
         code: data.code,
         message: data.message,
-        session_id: input.data?.session_id,
+        session_id: sessionId === undefined || sessionId === null ? undefined : String(sessionId),
       } satisfies ZarinPalData,
     }
   }
 
-  async authorizePayment(
-    input: AuthorizePaymentInput
-  ): Promise<AuthorizePaymentOutput> {
+  async authorizePayment(input: AuthorizePaymentInput): Promise<AuthorizePaymentOutput> {
     this.assertConfigured()
 
-    const authority = input.data?.authority as string | undefined
-    const amount = input.data?.amount as number | undefined
+    const data = (input.data ?? {}) as ZarinPalData
+    const authority = data.authority
+    const amount = data.amount
 
-    if (!authority || typeof authority !== "string") {
+    if (!authority) {
       throw new MedusaError(
         MedusaError.Types.INVALID_DATA,
         "ZarinPal authority is missing from the payment session."
       )
     }
 
-    const amountInRial = amount ?? new BigNumber(input.amount).numeric
+    if (typeof amount !== "number") {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_DATA,
+        "ZarinPal payment amount is missing from the payment session."
+      )
+    }
 
     const result = await this.post("/pg/v4/payment/verify.json", {
       merchant_id: this.merchantId,
       authority,
-      amount: amountInRial,
+      amount,
     })
 
-    const data = result.data
-    const success = data?.code === 100 || data?.code === 101
+    const responseData = result.data
+    const success = responseData?.code === 100 || responseData?.code === 101
 
     if (!success) {
       throw new MedusaError(
         MedusaError.Types.PAYMENT_AUTHORIZATION_ERROR,
-        `ZarinPal payment verification failed (${data?.code ?? "unknown"}): ${data?.message || "Payment was not verified."}`
+        `ZarinPal payment verification failed (${responseData?.code ?? "unknown"}): ${responseData?.message || "Payment was not verified."}`
       )
     }
 
     return {
       status: "authorized",
       data: {
-        ...(input.data as ZarinPalData),
+        ...data,
         status: "authorized",
-        code: data.code,
-        message: data.message,
-        ref_id: data.ref_id,
-        card_pan: data.card_pan,
-        fee: data.fee,
-        fee_type: data.fee_type,
+        code: responseData.code,
+        message: responseData.message,
+        ref_id: responseData.ref_id,
+        card_pan: responseData.card_pan,
+        fee: responseData.fee,
+        fee_type: responseData.fee_type,
       },
     }
   }
 
-  async capturePayment(
-    input: CapturePaymentInput
-  ): Promise<CapturePaymentOutput> {
-    // ZarinPal's standard flow verifies the payment after the customer returns
-    // from the gateway. There is no separate capture call in this integration.
+  async capturePayment(input: CapturePaymentInput): Promise<CapturePaymentOutput> {
     return {
       data: {
-        ...(input.data as ZarinPalData),
+        ...((input.data ?? {}) as ZarinPalData),
         status: "captured",
       },
     }
   }
 
-  async refundPayment(
-    input: RefundPaymentInput
-  ): Promise<RefundPaymentOutput> {
-    // TODO: Wire this to ZarinPal's refund/reconciliation API once the gateway
-    // account is activated and the exact refund API available to this account is confirmed.
+  async refundPayment(input: RefundPaymentInput): Promise<RefundPaymentOutput> {
     throw new MedusaError(
       MedusaError.Types.NOT_ALLOWED,
       `ZarinPal refunds are TODO until the gateway account is activated. Requested amount: ${input.amount}`
     )
   }
 
-  async cancelPayment(
-    input: CancelPaymentInput
-  ): Promise<CancelPaymentOutput> {
-    // There is no separate cancellation request in the standard request/verify flow.
+  async cancelPayment(input: CancelPaymentInput): Promise<CancelPaymentOutput> {
     return {
       data: {
-        ...(input.data as ZarinPalData),
+        ...((input.data ?? {}) as ZarinPalData),
         status: "canceled",
       },
     }
   }
 
-  async deletePayment(
-    input: DeletePaymentInput
-  ): Promise<DeletePaymentOutput> {
+  async deletePayment(input: DeletePaymentInput): Promise<DeletePaymentOutput> {
     return { data: input.data }
   }
 
-  async retrievePayment(
-    input: RetrievePaymentInput
-  ): Promise<RetrievePaymentOutput> {
+  async retrievePayment(input: RetrievePaymentInput): Promise<RetrievePaymentOutput> {
     return { data: input.data }
   }
 
-  async updatePayment(
-    input: UpdatePaymentInput
-  ): Promise<UpdatePaymentOutput> {
-    // An authority is tied to the requested amount, so create a fresh payment
-    // request when Medusa changes the payment amount.
-    return this.initiatePayment({
-      ...input,
-      data: input.data,
+  async updatePayment(input: UpdatePaymentInput): Promise<UpdatePaymentOutput> {
+    const data = (input.data ?? {}) as ZarinPalData
+    const result = await this.initiatePayment({
+      amount: input.amount,
+      currency_code: input.currency_code,
+      data,
     })
+    return result
   }
 
-  async getPaymentStatus(
-    input: GetPaymentStatusInput
-  ): Promise<GetPaymentStatusOutput> {
-    const status = input.data?.status as string | undefined
+  async getPaymentStatus(input: GetPaymentStatusInput): Promise<GetPaymentStatusOutput> {
+    const data = (input.data ?? {}) as ZarinPalData
+    const status = data.status || "pending"
 
     const statusMap: Record<string, PaymentSessionStatus> = {
       pending: "pending",
@@ -320,7 +299,42 @@ class ZarinPalPaymentProviderService extends AbstractPaymentProvider<Options> {
     }
 
     return {
-      status: statusMap[status || "pending"] || "pending",
+      status: statusMap[status] || "pending",
+    }
+  }
+
+  async getWebhookActionAndData(
+    payload: ProviderWebhookPayload["payload"],
+  ): Promise<WebhookActionResult> {
+    const data = payload.data as Record<string, unknown>
+    const sessionId = typeof data.session_id === "string" ? data.session_id : ""
+    const amount = typeof data.amount === "number" ? data.amount : 0
+
+    if (!sessionId) {
+      return {
+        action: PaymentActions.NOT_SUPPORTED,
+        data: { session_id: "", amount: new BigNumber(amount) },
+      }
+    }
+
+    const status = typeof data.status === "string" ? data.status : ""
+    if (status === "authorized") {
+      return {
+        action: PaymentActions.AUTHORIZED,
+        data: { session_id: sessionId, amount: new BigNumber(amount) },
+      }
+    }
+
+    if (status === "captured" || status === "success") {
+      return {
+        action: PaymentActions.SUCCESSFUL,
+        data: { session_id: sessionId, amount: new BigNumber(amount) },
+      }
+    }
+
+    return {
+      action: PaymentActions.NOT_SUPPORTED,
+      data: { session_id: sessionId, amount: new BigNumber(amount) },
     }
   }
 }
