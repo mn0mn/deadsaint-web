@@ -6,7 +6,17 @@ import { useLocale } from "@/components/LocaleProvider";
 import { formatPrice } from "@/lib/format";
 import styles from "./ProductDetail.module.css";
 
-type Variant = { id: string; title?: string | null; manage_inventory?: boolean; inventory_quantity?: number | null; calculated_price?: { calculated_amount?: number | null; currency_code?: string | null } | null };
+type Variant = {
+  id: string;
+  title?: string | null;
+  manage_inventory?: boolean | null;
+  inventory_quantity?: number | null;
+  calculated_price?: {
+    calculated_amount?: number | null;
+    currency_code?: string | null;
+  } | null;
+};
+
 type Props = { title: string; description?: string | null; images: string[]; variants: Variant[] };
 
 export default function ProductDetail({ title, description, images, variants }: Props) {
@@ -19,7 +29,7 @@ export default function ProductDetail({ title, description, images, variants }: 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const selectedVariant = variants.find((variant) => variant.id === selectedVariantId);
-  const inStock = selectedVariant ? !selectedVariant.manage_inventory || (selectedVariant.inventory_quantity ?? 0) > 0 : false;
+  const inStock = selectedVariant ? selectedVariant.manage_inventory !== false ? (selectedVariant.inventory_quantity ?? 0) > 0 : true : false;
 
   function showPreviousImage() { if (images.length < 2) return; setActiveImage((current) => (current - 1 + images.length) % images.length); }
   function showNextImage() { if (images.length < 2) return; setActiveImage((current) => (current + 1) % images.length); }
