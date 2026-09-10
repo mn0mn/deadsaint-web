@@ -5,10 +5,7 @@ import { useCart } from "@/app/providers/cartProvider";
 
 import styles from "./cart.module.css";
 
-function formatPrice(
-  amount: number,
-  currencyCode: string,
-) {
+function formatPrice(amount: number, currencyCode: string) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: currencyCode.toUpperCase(),
@@ -16,13 +13,7 @@ function formatPrice(
 }
 
 export default function CartPage() {
-  const {
-    cart,
-    loading,
-    error,
-    updateQuantity,
-    removeItem,
-  } = useCart();
+  const { cart, loading, error, updateQuantity, removeItem } = useCart();
 
   if (loading) {
     return (
@@ -40,9 +31,7 @@ export default function CartPage() {
         <section className={styles.empty}>
           <div className={styles.cross}>†</div>
 
-          <p className={styles.eyebrow}>
-            DEADSAINT / CART
-          </p>
+          <p className={styles.eyebrow}>DEADSAINT / CART</p>
 
           <h1 className={styles.emptyTitle}>
             NOTHING
@@ -56,10 +45,7 @@ export default function CartPage() {
             Find something worth bringing back.
           </p>
 
-          <Link
-            href="/shop"
-            className={styles.shopButton}
-          >
+          <Link href="/shop" className={styles.shopButton}>
             ENTER THE SHOP
             <span>↗</span>
           </Link>
@@ -77,9 +63,7 @@ export default function CartPage() {
     <main className={styles.page}>
       <header className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>
-            DEADSAINT / SHOPPING CART
-          </p>
+          <p className={styles.eyebrow}>DEADSAINT / SHOPPING CART</p>
 
           <h1 className={styles.title}>
             YOUR
@@ -89,28 +73,19 @@ export default function CartPage() {
         </div>
 
         <div className={styles.itemCount}>
-          <span>ITEMS</span>
-          <strong>
-            {String(itemCount).padStart(2, "0")}
-          </strong>
+          <span>PIECES</span>
+          <strong>{String(itemCount).padStart(2, "0")}</strong>
         </div>
       </header>
 
       <div className={styles.rule} />
 
-      {error && (
-        <div className={styles.error}>
-          {error}
-        </div>
-      )}
+      {error && <div className={styles.error}>{error}</div>}
 
       <div className={styles.layout}>
         <section className={styles.items}>
           {cart.items.map((item, index) => (
-            <article
-              key={item.id}
-              className={styles.item}
-            >
+            <article key={item.id} className={styles.item}>
               <span className={styles.index}>
                 {String(index + 1).padStart(2, "0")}
               </span>
@@ -134,27 +109,19 @@ export default function CartPage() {
               <div className={styles.details}>
                 <div className={styles.top}>
                   <div>
-                    <p className={styles.productType}>
-                      DEADSAINT
-                    </p>
+                    <p className={styles.productType}>DEADSAINT / DROP</p>
 
                     <h2 className={styles.productName}>
                       {item.product_title ?? item.title}
                     </h2>
 
                     {item.variant_title && (
-                      <p className={styles.variant}>
-                        {item.variant_title}
-                      </p>
+                      <p className={styles.variant}>{item.variant_title}</p>
                     )}
                   </div>
 
                   <p className={styles.price}>
-                    {formatPrice(
-                      //item.total,
-                      80008,
-                      cart.currency_code,
-                    )}
+                    {formatPrice(item.total, cart.currency_code)}
                   </p>
                 </div>
 
@@ -163,30 +130,19 @@ export default function CartPage() {
                     <button
                       type="button"
                       onClick={() =>
-                        updateQuantity(
-                          item.id,
-                          item.quantity - 1,
-                        )
+                        updateQuantity(item.id, item.quantity - 1)
                       }
                       aria-label="Decrease quantity"
                     >
                       −
                     </button>
 
-                    <span>
-                      {String(item.quantity).padStart(
-                        2,
-                        "0",
-                      )}
-                    </span>
+                    <span>{String(item.quantity).padStart(2, "0")}</span>
 
                     <button
                       type="button"
                       onClick={() =>
-                        updateQuantity(
-                          item.id,
-                          item.quantity + 1,
-                        )
+                        updateQuantity(item.id, item.quantity + 1)
                       }
                       aria-label="Increase quantity"
                     >
@@ -208,22 +164,19 @@ export default function CartPage() {
         </section>
 
         <aside className={styles.summary}>
+          <div className={styles.summaryStamp}>
+            <span>DS / 000</span>
+            <span>READY ROOM</span>
+          </div>
+
           <div className={styles.summaryHeader}>
             <span>THE DAMAGE</span>
-            <span>
-              {cart.currency_code.toUpperCase()}
-            </span>
+            <span>{cart.currency_code.toUpperCase()}</span>
           </div>
 
           <div className={styles.totalRow}>
             <span>SUBTOTAL</span>
-
-            <strong>
-              {formatPrice(
-                cart.subtotal,
-                cart.currency_code,
-              )}
-            </strong>
+            <strong>{formatPrice(cart.subtotal, cart.currency_code)}</strong>
           </div>
 
           <div className={styles.divider} />
@@ -238,26 +191,20 @@ export default function CartPage() {
             <span>CALCULATED AT CHECKOUT</span>
           </div>
 
-          <button
-            type="button"
-            className={styles.checkout}
-          >
+          <button type="button" className={styles.checkout}>
             PROCEED TO CHECKOUT
             <span>↗</span>
           </button>
 
-          <Link
-            href="/shop"
-            className={styles.continue}
-          >
+          <Link href="/shop" className={styles.continue}>
             ← CONTINUE SHOPPING
           </Link>
 
           <div className={styles.warning}>
             <span>†</span>
-
             <p>
               ITEMS ARE NOT RESERVED UNTIL
+              <br />
               CHECKOUT IS COMPLETED.
             </p>
           </div>
