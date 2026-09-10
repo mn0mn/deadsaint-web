@@ -12,5 +12,16 @@ module.exports = defineConfig({
       jwtSecret: process.env.JWT_SECRET,
       cookieSecret: process.env.COOKIE_SECRET,
     }
-  }
+  },
+  modules: [
+    {
+      resolve: "./src/modules/zarinpal",
+      options: {
+        merchant_id: process.env.ZARINPAL_MERCHANT_ID,
+        callback_url: process.env.ZARINPAL_CALLBACK_URL,
+        base_url: process.env.ZARINPAL_BASE_URL,
+        start_pay_url: process.env.ZARINPAL_START_PAY_URL,
+      },
+    },
+  ],
 })
