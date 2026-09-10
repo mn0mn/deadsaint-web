@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useContext, useMemo, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
 import { LOCALE_COOKIE, type Locale, getMessages } from "@/lib/i18n";
 
 type LocaleContextValue = {
@@ -14,23 +13,22 @@ const LocaleContext = createContext<LocaleContextValue | null>(null);
 
 export function LocaleProvider({ children, initialLocale = "en" }: { children: React.ReactNode; initialLocale?: Locale }) {
   const [locale, setLocaleState] = useState<Locale>(initialLocale);
-  const router = useRouter();
-  const pathname = usePathname();
 
   const setLocale = (next: Locale) => {
     if (next === locale) return;
 
     document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=31536000; samesite=lax`;
-    document.documentElement.lang = next;
-    document.documentElement.dir = next === "fa" ? "rtl" : "ltr";
-    setLocaleState(next);
 
-    const currentPath = pathname || "/";
+    const currentPath = window.location.pathname || "/";
     const withoutLocale = currentPath.replace(/^\/(en|fa)(?=\/|$)/, "") || "/";
-    router.replace(`/${next}${withoutLocale === "/" ? "/" : withoutLocale}`);
+    const nextPath = `/${next}${withoutLocale === "/" ? "/" : withoutLocale}`;
+
+    // Do a full navigation so the middleware, server layout, html lang/dir,
+    // and all server-rendered translations are guaranteed to use the same locale.
+    window.location.replace(nextPath);
   };
 
-  const value = useMemo(() => ({ locale, messages: getMessages(locale), setLocale }), [locale, pathname]);
+  const value = useMemo(() => ({ locale, messages: getMessages(locale), setLocale }), [locale]);
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
 }
 
