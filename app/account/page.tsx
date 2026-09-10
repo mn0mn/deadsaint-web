@@ -12,7 +12,7 @@ type AccountOrder = { id: string; created_at?: string; total?: number; currency_
 
 export default function AccountPage() {
   const router = useRouter();
-  const { locale, messages: messages } = useLocale();
+  const { locale, messages } = useLocale();
   const m = messages.account;
   const [activeTab, setActiveTab] = useState<AccountTab>("orders");
   const [orders, setOrders] = useState<AccountOrder[]>([]);
@@ -24,7 +24,16 @@ export default function AccountPage() {
   useEffect(() => {
     if (!customer) return;
     let cancelled = false;
-    async function loadOrders() { setOrdersLoading(true); setOrdersError(false); try { const response = await medusa.store.order.list({ customer_id: customer.id, limit: 50, order: "-created_at" }); if (!cancelled) setOrders(response.orders as AccountOrder[]); } catch (error) { console.error("Failed to load customer orders:", error); if (!cancelled) setOrdersError(true); } finally { if (!cancelled) setOrdersLoading(false); } }
+    async function loadOrders() {
+      setOrdersLoading(true); setOrdersError(false);
+      try {
+        const response = await medusa.store.order.list({ limit: 50, order: "-created_at" });
+        if (!cancelled) setOrders(response.orders as AccountOrder[]);
+      } catch (error) {
+        console.error("Failed to load customer orders:", error);
+        if (!cancelled) setOrdersError(true);
+      } finally { if (!cancelled) setOrdersLoading(false); }
+    }
     void loadOrders(); return () => { cancelled = true; };
   }, [customer]);
 
@@ -49,6 +58,6 @@ export default function AccountPage() {
       {activeTab === "addresses" && <section><div className="account-section-heading"><div><span className="account-section-index">03 /</span><h2>{m.whereToSend}</h2></div></div><div className="account-address-list"><p>{m.noAddresses}</p><button className="btn" type="button">{m.addAddress}</button></div></section>}
       {activeTab === "settings" && <section><div className="account-section-heading"><div><span className="account-section-index">04 /</span><h2>{m.settings}</h2></div></div><div className="account-setting-list"><div className="account-setting"><div><strong>{m.newsletter}</strong><span>{m.newsletterBody}</span></div><span className="account-toggle" aria-hidden="true" /></div><div className="account-setting"><div><strong>{m.orderUpdates}</strong><span>{m.orderUpdatesBody}</span></div><span className="account-toggle" aria-hidden="true" /></div><div className="account-setting"><div><strong>{m.deleteAccount}</strong><span>{m.deleteBody}</span></div><button className="account-delete" type="button">{m.delete}</button></div></div></section>}
     </section>
-    <footer className="account-footer"><p>{m.footer1}<br />{m.footer2}</p><strong>☠ KEEP THE DEAD ALIVE ☠</strong></footer>
+    <footer className="account-footer"><p>{m.footer1}<br />{m.footer2}</p><strong>{locale === "fa" ? "☠ مرده‌ها را زنده نگه دار ☠" : "☠ KEEP THE DEAD ALIVE ☠"}</strong></footer>
   </div>;
 }
