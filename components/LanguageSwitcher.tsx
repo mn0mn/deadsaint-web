@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useLocale } from "@/components/LocaleProvider";
+import { useLocale } from '@/components/LocaleProvider';
 
 export default function LanguageSwitcher() {
   const { locale, setLocale, messages } = useLocale();
-  const nextLocale = locale === "en" ? "fa" : "en";
+  const nextLocale = locale === 'en' ? 'fa' : 'en';
 
   return (
     <button
       type="button"
       className="language-switcher"
       onClick={() => setLocale(nextLocale)}
-      aria-label={`Switch language to ${nextLocale === "fa" ? "Persian" : "English"}`}
+      aria-label={`Switch language to ${nextLocale === 'fa' ? 'Persian' : 'English'}`}
     >
-      {messages.nav.language}
+      {messages.nav.language == 'فارسی' ? 'FA' : 'EN'}
     </button>
   );
 }
