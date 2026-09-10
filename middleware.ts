@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { DEFAULT_LOCALE, LOCALE_COOKIE, isLocale } from "@/lib/i18n";
 
 const PUBLIC_FILE = /\.[^/]+$/;
+const LOCALE_HEADER = "x-deadsaint-locale";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -17,8 +18,18 @@ export function middleware(request: NextRequest) {
     const locale = first;
     const rewritten = request.nextUrl.clone();
     rewritten.pathname = `/${segments.slice(1).join("/")}` || "/";
-    const response = NextResponse.rewrite(rewritten);
-    response.cookies.set(LOCALE_COOKIE, locale, { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
+
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set(LOCALE_HEADER, locale);
+
+    const response = NextResponse.rewrite(rewritten, {
+      request: { headers: requestHeaders },
+    });
+    response.cookies.set(LOCALE_COOKIE, locale, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "lax",
+    });
     return response;
   }
 
