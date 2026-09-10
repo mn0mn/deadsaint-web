@@ -34,12 +34,12 @@ export default function CartPage() {
       <section className={styles.items}>{cart.items.map((item, index) => <article key={item.id} className={styles.item}>
         <span className={styles.index}>{String(index + 1).padStart(2, "0")}</span>
         <Link href={href(`/shop/${item.product_handle}`)} className={styles.image}>{item.thumbnail ? <img src={item.thumbnail} alt={item.product_title ?? item.title} /> : <div className={styles.noImage}><span>DS</span></div>}</Link>
-        <div className={styles.details}><div className={styles.top}><div><p className={styles.productType}>{t.drop}</p><h2 className={styles.productName}>{item.product_title ?? item.title}</h2>{item.variant_title && <p className={styles.variant}>{item.variant_title}</p>}</div><p className={styles.price}>{formatPrice(item.total, cart.currency_code, locale)}</p></div>
+        <div className={styles.details}><div className={styles.top}><div><p className={styles.productType}>{t.drop}</p><h2 className={styles.productName}>{item.product_title ?? item.title}</h2>{item.variant_title && <p className={styles.variant}>{item.variant_title}</p>}</div><p className={styles.price}>{formatPrice(item.total ?? 0, cart.currency_code, locale)}</p></div>
           <div className={styles.bottom}><div className={styles.quantity}><button type="button" onClick={() => updateQuantity(item.id, item.quantity - 1)} aria-label={t.decrease}>−</button><span>{String(item.quantity).padStart(2, "0")}</span><button type="button" onClick={() => updateQuantity(item.id, item.quantity + 1)} aria-label={t.increase}>+</button></div><button type="button" className={styles.remove} onClick={() => removeItem(item.id)}>{t.remove}</button></div>
         </div>
       </article>)}</section>
       <aside className={styles.summary}><div className={styles.summaryStamp}><span>DS / 000</span><span>READY ROOM</span></div><div className={styles.summaryHeader}><span>{t.damage}</span><span>{cart.currency_code.toUpperCase()}</span></div>
-        <div className={styles.totalRow}><span>{t.subtotal}</span><strong>{formatPrice(cart.subtotal, cart.currency_code, locale)}</strong></div><div className={styles.divider} />
+        <div className={styles.totalRow}><span>{t.subtotal}</span><strong>{formatPrice(cart.subtotal ?? 0, cart.currency_code, locale)}</strong></div><div className={styles.divider} />
         <div className={styles.metaRow}><span>{t.shipping}</span><span>{t.calculated}</span></div><div className={styles.metaRow}><span>{t.tax}</span><span>{t.calculated}</span></div>
         <button type="button" className={styles.checkout}>{t.checkout}<span>↗</span></button><Link href={href("/shop")} className={styles.continue}>{t.continue}</Link>
         <div className={styles.warning}><span>†</span><p>{t.warning}<br />{t.warning2}</p></div>
