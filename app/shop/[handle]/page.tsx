@@ -10,7 +10,7 @@ const LOCALE_HEADER = "x-deadsaint-locale";
 async function getRequestLocale(): Promise<Locale> {
   const headerStore = await headers();
   const cookieStore = await cookies();
-  const headerLocale = headerStore.get(LOCALE_HEADER);
+  const headerLocale = headerStore.get(LOCALE_HEADER) ?? undefined;
   const cookieLocale = cookieStore.get(LOCALE_COOKIE)?.value;
   return isLocale(headerLocale) ? headerLocale : isLocale(cookieLocale) ? cookieLocale : DEFAULT_LOCALE;
 }
