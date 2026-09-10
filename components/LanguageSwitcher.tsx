@@ -3,7 +3,7 @@
 import { useLocale } from '@/components/LocaleProvider';
 
 export default function LanguageSwitcher() {
-  const { locale, setLocale, messages } = useLocale();
+  const { locale, setLocale } = useLocale();
   const nextLocale = locale === 'en' ? 'fa' : 'en';
 
   return (
@@ -12,8 +12,9 @@ export default function LanguageSwitcher() {
       className="language-switcher"
       onClick={() => setLocale(nextLocale)}
       aria-label={`Switch language to ${nextLocale === 'fa' ? 'Persian' : 'English'}`}
+      title={nextLocale === 'fa' ? 'فارسی' : 'English'}
     >
-      {messages.nav.language == 'فارسی' ? 'FA' : 'EN'}
+      <span aria-hidden="true">{nextLocale === 'fa' ? '🇮🇷' : '🇺🇸'}</span>
     </button>
   );
 }
