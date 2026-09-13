@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { messages, isLocale, LOCALE_COOKIE, type Locale } from "@/lib/i18n";
+import { isLocale, LOCALE_COOKIE, type Locale } from "@/lib/i18n";
 import styles from "./StoreUnavailable.module.css";
 
 type StoreUnavailableProps = {
@@ -29,16 +29,20 @@ export default function StoreUnavailable({ reset, fullScreen = false }: StoreUna
     if (!reset) window.location.reload();
   }, [reset]);
 
-  const t = messages[locale].storeUnavailable;
+  const isFa = locale === "fa";
 
   return (
-    <main className={`${styles.root} ${fullScreen ? styles.fullScreen : ""}`}>
+    <main className={`${styles.root} ${fullScreen ? styles.fullScreen : ""}`} dir={isFa ? "rtl" : "ltr"}>
       <section className={styles.panel} role="alert">
         <div className={styles.mark} aria-hidden="true">DS</div>
-        <p className={styles.code}>{t.code}</p>
-        <h1>{t.title}</h1>
-        <p className={styles.body}>{t.body}</p>
-        <button type="button" onClick={retry} className={styles.retry}>{t.retry}<span aria-hidden="true">↻</span></button>
+        <p className={styles.code}>{isFa ? "خطای 503 / سرویس در دسترس نیست" : "ERROR 503 / SERVICE UNAVAILABLE"}</p>
+        <h1>{isFa ? "فروشگاه در دسترس نیست." : "STORE UNAVAILABLE."}</h1>
+        <p className={styles.body}>
+          {isFa ? "اتصال به سرور فروشگاه برقرار نشد. چند لحظه دیگر دوباره امتحان کن." : "We couldn't reach the store backend. Give it a moment, then try again."}
+        </p>
+        <button type="button" onClick={retry} className={styles.retry}>
+          {isFa ? "تلاش دوباره" : "RETRY"}<span aria-hidden="true">↻</span>
+        </button>
       </section>
     </main>
   );
