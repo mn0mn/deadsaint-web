@@ -1,0 +1,13 @@
+.root { min-height: 70vh; display: grid; place-items: center; padding: 72px 5vw; background: var(--noir); color: var(--bone); }
+.fullScreen { min-height: 100vh; }
+.panel { width: min(680px, 100%); padding: clamp(36px, 7vw, 72px); border: 1px solid rgba(232,225,211,.16); position: relative; overflow: hidden; }
+.panel::before { content: ""; position: absolute; inset: 12px; border: 1px solid rgba(142,23,29,.45); pointer-events: none; }
+.mark { position: relative; width: 58px; height: 58px; display: grid; place-items: center; margin-bottom: 38px; border: 1px solid var(--blood); font: 700 18px/1 Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif; letter-spacing: .08em; }
+.code { position: relative; margin: 0 0 14px; color: var(--ash); font: 700 .68rem/1.4 monospace; letter-spacing: .14em; text-transform: uppercase; }
+.panel h1 { position: relative; margin: 0; max-width: 12ch; font: 400 clamp(2.6rem, 7vw, 5.5rem)/.88 Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif; letter-spacing: .015em; text-transform: uppercase; }
+.body { position: relative; max-width: 48ch; margin: 28px 0 34px; color: var(--ash); font-size: .95rem; line-height: 1.7; }
+.retry { position: relative; display: inline-flex; align-items: center; gap: 16px; padding: 13px 20px; border: 1px solid var(--bone); background: transparent; color: var(--bone); cursor: pointer; font: 700 .7rem/1 monospace; letter-spacing: .14em; }
+.retry:hover { background: var(--bone); color: var(--noir); }
+.retry span { font-size: 1.1rem; }
+[dir="rtl"] .code { letter-spacing: 0; }
+@media (max-width: 600px) { .root { min-height: 65vh; padding: 40px 5vw; } .panel { padding: 32px 24px; } .mark { margin-bottom: 28px; } }
