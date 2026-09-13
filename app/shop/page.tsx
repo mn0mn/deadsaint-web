@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import ProductCard from "@/components/ProductCard";
+import StoreUnavailable from "@/components/StoreUnavailable";
 import { getAllProducts } from "@/lib/medusa";
 import { getMessages, isLocale, LOCALE_COOKIE } from "@/lib/i18n";
 import styles from "./Shop.module.css";
@@ -12,10 +13,17 @@ const categoryKeys = [
 ] as const;
 
 export default async function ShopPage() {
-  const products = await getAllProducts();
   const cookieLocale = (await cookies()).get(LOCALE_COOKIE)?.value;
   const messages = getMessages(isLocale(cookieLocale) ? cookieLocale : "en");
   const t = messages.shop;
+
+  let products;
+  try {
+    products = await getAllProducts();
+  } catch (error) {
+    console.error("Failed to load shop:", error);
+    return <StoreUnavailable />;
+  }
 
   return (
     <section className={styles.shop}>
