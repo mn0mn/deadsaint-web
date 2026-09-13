@@ -2,7 +2,9 @@
 
 .home-hero {
   padding: clamp(60px, 10vw, 110px) 5vw 50px;
-  border-bottom: 4px solid var(--ink);
+  border-bottom: 4px solid var(--noir);
+  background: var(--paper);
+  color: var(--noir);
 }
 
 .home-hero-kicker {
@@ -75,8 +77,8 @@
   gap: 34px;
   padding: 11px 5vw;
   background: var(--highlighter);
-  color: var(--ink);
-  border-bottom: 3px solid var(--ink);
+  color: var(--noir);
+  border-bottom: 3px solid var(--noir);
   font-family: monospace;
   font-size: 0.7rem;
   font-weight: 900;
@@ -122,7 +124,9 @@
 
 .featured {
   padding: 60px 5vw 20px;
-  border-top: 3px solid var(--ink);
+  border-top: 3px solid var(--noir);
+  background: var(--paper);
+  color: var(--noir);
 }
 
 .featured-heading {
