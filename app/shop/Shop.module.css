@@ -1,65 +1,93 @@
 .shop {
   min-width: 0;
+  padding-bottom: 72px;
+}
+
+.shop h1 {
+  margin: 0;
+  padding: 58px 5vw 30px;
+  border-bottom: 1px solid rgba(232, 225, 211, 0.12);
+  color: var(--bone);
+  font: 900 clamp(64px, 11vw, 150px)/0.82 Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+}
+
+.shop h1::after {
+  content: "// 0001";
+  display: block;
+  margin-top: 24px;
+  color: var(--blood);
+  font: 700 10px/1 var(--font-mono, monospace);
+  letter-spacing: 0.18em;
 }
 
 .categoryMenu {
   margin: 0 5vw;
-  border-top: 3px solid var(--ink);
-  border-bottom: 3px solid var(--ink);
+  border-bottom: 1px solid rgba(232, 225, 211, 0.14);
 }
 
 .categoryTrigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 0;
+  padding: 20px 0;
   cursor: pointer;
   list-style: none;
-  font: 900 14px/1 Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  letter-spacing: 0.08em;
+  color: var(--bone);
+  font: 900 13px/1 Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   user-select: none;
 }
 
-.categoryTrigger::-webkit-details-marker {
-  display: none;
+.categoryTrigger::-webkit-details-marker { display: none; }
+
+.categoryTrigger::after {
+  content: "FILTER / CATEGORIES";
+  margin-inline-end: auto;
+  margin-inline-start: 20px;
+  color: var(--ash);
+  font: 600 9px/1 var(--font-mono, monospace);
+  letter-spacing: 0.12em;
 }
 
 .categoryIcon {
   display: inline-grid;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   place-items: center;
-  border: 2px solid var(--ink);
-  font: 700 18px/1 var(--font-mono, monospace);
+  border: 1px solid rgba(232, 225, 211, 0.35);
+  color: var(--bone);
+  font: 400 18px/1 var(--font-mono, monospace);
   transition: transform 160ms ease, background 160ms ease, color 160ms ease;
 }
 
 .categoryMenu[open] .categoryIcon {
   transform: rotate(45deg);
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--blood);
+  border-color: var(--blood);
+  color: var(--bone);
 }
 
 .categoryPanel {
-  padding: 4px 0 20px;
-  border-top: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
+  padding: 6px 0 24px;
+  border-top: 1px solid rgba(232, 225, 211, 0.1);
 }
 
 .category {
   display: grid;
-  grid-template-columns: 180px 1fr;
-  gap: 28px;
-  padding: 18px 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
+  grid-template-columns: 150px 1fr;
+  gap: 32px;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(232, 225, 211, 0.1);
 }
 
-.category:last-child {
-  border-bottom: none;
-}
+.category:last-child { border-bottom: none; }
 
 .categoryName {
-  font: 900 14px/1 Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  color: var(--ash);
+  font: 900 13px/1 Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -67,29 +95,41 @@
 .subcategories {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 7px;
 }
 
 .subcategory {
   display: inline-block;
-  padding: 8px 11px;
-  border: 2px solid var(--ink);
-  font: 700 11px/1 var(--font-mono, monospace);
+  padding: 9px 12px;
+  border: 1px solid rgba(232, 225, 211, 0.26);
+  color: var(--bone);
+  font: 700 10px/1 var(--font-mono, monospace);
   letter-spacing: 0.06em;
   text-decoration: none;
   text-transform: uppercase;
-  transition: background 120ms ease, color 120ms ease, transform 120ms ease;
+  transition: background 140ms ease, color 140ms ease, border-color 140ms ease, transform 140ms ease;
 }
 
 .subcategory:hover {
-  background: var(--ink);
-  color: var(--paper);
-  transform: translate(-2px, -2px);
+  background: var(--bone);
+  border-color: var(--bone);
+  color: var(--noir);
+  transform: translateY(-2px);
+}
+
+.shop > .grid {
+  margin-top: 0;
+  padding-top: 44px;
+}
+
+.shop > .grid > * {
+  border-bottom: 1px solid rgba(232, 225, 211, 0.1);
+  padding-bottom: 24px;
 }
 
 @media (max-width: 700px) {
-  .category {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
+  .shop h1 { padding-top: 42px; }
+  .categoryTrigger::after { display: none; }
+  .category { grid-template-columns: 1fr; gap: 12px; }
+  .shop > .grid { padding-top: 30px; }
 }
