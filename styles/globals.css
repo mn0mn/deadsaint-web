@@ -1,6 +1,6 @@
 :root {
   --paper: #e8e1d3;
-  --ink: #e8e1d3;
+  --ink: #0b0b0b;
   --noir: #0b0a09;
   --blood: #8e171d;
   --highlighter: #b6a889;
@@ -13,6 +13,26 @@
 html, body { margin: 0; padding: 0; }
 body { background: var(--noir); color: var(--bone); font-family: system-ui, sans-serif; }
 a { color: inherit; }
+
+/* Internal pages use the noir system without corrupting the original light-page semantics. */
+main {
+  --page-bg: var(--noir);
+  --page-fg: var(--bone);
+  --ink: var(--bone);
+  --paper: var(--noir);
+  background: var(--page-bg);
+  color: var(--page-fg);
+}
+
+/* The homepage remains the deliberate paper / ink composition. */
+main:has(.home-hero) {
+  --ink: #0b0b0b;
+  --paper: #e8e1d3;
+  --page-bg: var(--paper);
+  --page-fg: var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+}
 
 .site-header { display: grid; grid-template-columns: minmax(250px, 1fr) auto minmax(250px, 1fr); align-items: center; min-height: 100px; padding: 16px 5vw; background: var(--noir); color: var(--bone); border-bottom: 1px solid rgba(232,225,211,.12); }
 .site-header .logo { display:block; width:58px; height:51px; flex:0 0 auto; }
@@ -35,7 +55,7 @@ a { color: inherit; }
 .menu-toggle { display:none; flex-direction:column; justify-content:center; align-items:center; gap:5px; width:36px; height:36px; padding:8px; background:none; border:none; cursor:pointer; }
 .menu-toggle span { display:block; width:22px; height:2px; background:var(--bone); border-radius:1px; transition:transform .25s ease,opacity .2s ease; }
 .menu-toggle.is-open span:nth-child(1){transform:translateY(7px) rotate(45deg)} .menu-toggle.is-open span:nth-child(2){opacity:0} .menu-toggle.is-open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.btn { display:inline-block; padding:14px 28px; background:var(--bone); color:var(--noir); text-decoration:none; border:none; cursor:pointer; }
+.btn { display:inline-block; padding:14px 28px; background:var(--ink); color:var(--paper); text-decoration:none; border:none; cursor:pointer; }
 .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:32px; padding:40px 5vw; }
 html[dir="rtl"] body { font-family: Tahoma, "Arial", sans-serif; }
 html[dir="rtl"] .brand-name, html[dir="rtl"] .brand-tagline, html[dir="rtl"] .site-header nav a, html[dir="rtl"] .header-right a, html[dir="rtl"] .language-switcher { letter-spacing:0; }
