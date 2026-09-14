@@ -28,18 +28,24 @@ export default async function ShopPage() {
   return (
     <section className={styles.shop}>
       <h1>{t.title}</h1>
-      <div className={styles.categories} aria-label={t.categories}>
-        {categoryKeys.map((category) => (
-          <div className={styles.category} key={category.name}>
-            <span className={styles.categoryName}>{t[category.name]}</span>
-            <div className={styles.subcategories}>
-              {category.items.map((item) => (
-                <Link key={item} href={`/shop?category=${encodeURIComponent(t[item])}`} className={styles.subcategory}>{t[item]}</Link>
-              ))}
+      <details className={styles.categoryMenu}>
+        <summary className={styles.categoryTrigger}>
+          <span>{t.categories}</span>
+          <span className={styles.categoryIcon} aria-hidden="true">+</span>
+        </summary>
+        <div className={styles.categoryPanel}>
+          {categoryKeys.map((category) => (
+            <div className={styles.category} key={category.name}>
+              <span className={styles.categoryName}>{t[category.name]}</span>
+              <div className={styles.subcategories}>
+                {category.items.map((item) => (
+                  <Link key={item} href={`/shop?category=${encodeURIComponent(t[item])}`} className={styles.subcategory}>{t[item]}</Link>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </details>
       <div className="grid">{products.map((product) => <ProductCard key={product.id} product={product} />)}</div>
     </section>
   );
