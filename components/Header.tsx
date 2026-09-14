@@ -4,16 +4,21 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCustomer } from "@/app/providers/customerProvider";
+import { useCart } from "@/app/providers/CartProvider";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLocale } from "@/components/LocaleProvider";
+import { formatPrice } from "@/lib/format";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { customer, loading } = useCustomer();
+  const { cart } = useCart();
   const { locale, messages } = useLocale();
   const prefix = `/${locale}`;
 
   const accountLabel = loading ? "..." : customer ? customer.first_name || customer.email.split("@")[0] : messages.nav.login;
+  const cartItems = cart?.items ?? [];
+  const cartCount = cartItems.reduce((total, item) => total + (item.quantity ?? 0), 0);
   const close = () => setMenuOpen(false);
 
   return (
@@ -36,9 +41,45 @@ export default function Header() {
       </nav>
 
       <div className="header-right">
-        <LanguageSwitcher />
         <Link href={customer ? `${prefix}/account` : `${prefix}/login`} className="account-link" onClick={close}>{accountLabel}</Link>
-        <Link href={`${prefix}/cart`} className="cart-link" onClick={close}>{messages.nav.cart}</Link>
+        <div className="cart-wrap">
+          <Link href={`${prefix}/cart`} className="cart-link" onClick={close}>
+            {messages.nav.cart}{cartCount > 0 ? ` [${cartCount}]` : ""}
+          </Link>
+          <div className="cart-dropdown" aria-label="Cart preview">
+            {cartItems.length > 0 ? (
+              <>
+                <div className="cart-dropdown-head">
+                  <span>CART / {cartCount}</span>
+                  <span>PREVIEW</span>
+                </div>
+                <div className="cart-dropdown-items">
+                  {cartItems.slice(0, 4).map((item) => {
+                    const image = item.thumbnail;
+                    const amount = item.unit_price ?? 0;
+                    return (
+                      <div className="cart-preview-item" key={item.id}>
+                        {image ? <img src={image} alt="" /> : <span className="cart-preview-placeholder" />}
+                        <div className="cart-preview-copy">
+                          <strong>{item.product_title ?? item.title}</strong>
+                          <span>QTY {item.quantity} · {formatPrice(amount, cart.currency_code ?? "usd")}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                {cartItems.length > 4 && <div className="cart-more">+ {cartItems.length - 4} MORE ITEMS</div>}
+                <Link href={`${prefix}/cart`} className="cart-view-all" onClick={close}>VIEW CART →</Link>
+              </>
+            ) : (
+              <div className="cart-empty">
+                <span>CART / 00</span>
+                <p>Your cart is empty.</p>
+              </div>
+            )}
+          </div>
+        </div>
+        <LanguageSwitcher />
         <button className={`menu-toggle ${menuOpen ? "is-open" : ""}`} onClick={() => setMenuOpen((open) => !open)} aria-label="Toggle menu" aria-expanded={menuOpen}>
           <span /><span /><span />
         </button>
