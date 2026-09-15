@@ -34,6 +34,9 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
 
+// Keep the cart identifier out of persistent browser storage. The identifier
+// is still client-readable because the Medusa SDK needs it, so it must never
+// be treated as an authentication or authorization credential.
 const CART_ID_KEY = "deadsaint_cart_id";
 
 export function CartProvider({ children }: { children: ReactNode }) {
@@ -46,7 +49,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setLoading(true);
       setError(null);
 
-      const cartId = localStorage.getItem(CART_ID_KEY);
+      const cartId = sessionStorage.getItem(CART_ID_KEY);
 
       if (!cartId) {
         setCart(null);
@@ -61,7 +64,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
       // The stored cart might no longer exist.
       // Throw the stale ID away so we can create a fresh cart later.
-      localStorage.removeItem(CART_ID_KEY);
+      sessionStorage.removeItem(CART_ID_KEY);
       setCart(null);
     } finally {
       setLoading(false);
@@ -77,7 +80,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return cart;
     }
 
-    const cartId = localStorage.getItem(CART_ID_KEY);
+    const cartId = sessionStorage.getItem(CART_ID_KEY);
 
     if (cartId) {
       try {
@@ -87,13 +90,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
         return existingCart;
       } catch {
-        localStorage.removeItem(CART_ID_KEY);
+        sessionStorage.removeItem(CART_ID_KEY);
       }
     }
 
     const newCart = await createCart();
 
-    localStorage.setItem(CART_ID_KEY, newCart.id);
+    sessionStorage.setItem(CART_ID_KEY, newCart.id);
     setCart(newCart);
 
     return newCart;
