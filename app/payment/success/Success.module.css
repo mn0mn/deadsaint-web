@@ -1,0 +1,92 @@
+.page {
+  min-height: 100vh;
+  padding: 28px 5vw 40px;
+  background: var(--noir);
+  color: var(--bone);
+}
+
+.topline,
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  color: var(--ash);
+  font: 700 9px/1 var(--font-mono, monospace);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.topline { padding-bottom: 18px; border-bottom: 1px solid rgba(232,225,211,.14); }
+
+.hero {
+  position: relative;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 92px 0 82px;
+  border-bottom: 1px solid rgba(232,225,211,.14);
+}
+
+.kicker { margin: 0 0 18px; color: var(--blood); font: 800 10px/1 var(--font-mono, monospace); letter-spacing: .18em; }
+
+.hero h1 {
+  margin: 0;
+  font: 900 clamp(64px, 12vw, 170px)/.78 Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  letter-spacing: -.055em;
+  text-transform: uppercase;
+}
+
+.hero h1 em { color: var(--blood); font-style: normal; }
+
+.confirmMark {
+  position: absolute;
+  right: 4vw;
+  bottom: 76px;
+  display: grid;
+  width: 76px;
+  height: 76px;
+  place-items: center;
+  border: 1px solid var(--blood);
+  color: var(--blood);
+  font: 400 36px/1 var(--font-mono, monospace);
+  transform: rotate(45deg);
+}
+.confirmMark::first-letter { transform: rotate(-45deg); }
+
+.intro { max-width: 480px; margin: 34px 0 0; color: var(--ash); font: 500 13px/1.7 var(--font-mono, monospace); }
+
+.order { max-width: 1180px; margin: 0 auto; }
+.orderHeader { display: flex; justify-content: space-between; padding: 22px 0; border-bottom: 1px solid rgba(232,225,211,.14); }
+.orderHeader > div { display: flex; flex-direction: column; gap: 7px; }
+.label { color: var(--ash); font: 700 8px/1 var(--font-mono, monospace); letter-spacing: .15em; }
+.orderHeader strong { color: var(--bone); font: 800 14px/1 var(--font-mono, monospace); letter-spacing: .08em; }
+.status strong { color: var(--blood); }
+
+.item { display: grid; grid-template-columns: 82px 1fr auto; align-items: center; gap: 22px; padding: 18px 0; border-bottom: 1px solid rgba(232,225,211,.1); }
+.itemImage { display: grid; width: 82px; height: 94px; place-items: center; background: #151412; border: 1px solid rgba(232,225,211,.12); color: rgba(232,225,211,.35); font: 900 19px/1 Impact, sans-serif; }
+.itemInfo h2 { margin: 0 0 8px; color: var(--bone); font: 800 12px/1.2 var(--font-mono, monospace); letter-spacing: .05em; }
+.itemInfo p { margin: 0; color: var(--ash); font: 600 9px/1 var(--font-mono, monospace); letter-spacing: .08em; }
+.price { color: var(--bone); font: 800 12px/1 var(--font-mono, monospace); }
+
+.total { display: flex; justify-content: space-between; align-items: baseline; padding: 28px 0; border-bottom: 1px solid rgba(232,225,211,.18); }
+.total span { color: var(--ash); font: 800 10px/1 var(--font-mono, monospace); letter-spacing: .14em; }
+.total strong { color: var(--bone); font: 900 clamp(28px, 5vw, 54px)/1 Impact, sans-serif; letter-spacing: -.02em; }
+
+.actions { max-width: 1180px; margin: 38px auto 100px; display: flex; gap: 10px; }
+.actions a { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; text-decoration: none; font: 800 10px/1 var(--font-mono, monospace); letter-spacing: .1em; text-transform: uppercase; transition: transform .15s ease, background .15s ease, color .15s ease; }
+.primary { background: var(--blood); color: var(--bone); }
+.secondary { border: 1px solid rgba(232,225,211,.25); color: var(--bone); }
+.actions a:hover { transform: translateY(-2px); }
+.secondary:hover { background: var(--bone); color: var(--noir); }
+
+.footer { padding-top: 20px; border-top: 1px solid rgba(232,225,211,.12); }
+
+@media (max-width: 700px) {
+  .page { padding-top: 20px; }
+  .hero { padding: 64px 0 58px; }
+  .confirmMark { width: 52px; height: 52px; right: 4px; bottom: 52px; font-size: 24px; }
+  .item { grid-template-columns: 58px 1fr auto; gap: 13px; }
+  .itemImage { width: 58px; height: 70px; }
+  .itemInfo h2 { font-size: 10px; }
+  .actions { flex-direction: column; margin-bottom: 64px; }
+  .footer { flex-direction: column; align-items: flex-start; }
+}
