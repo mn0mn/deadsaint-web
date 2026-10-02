@@ -13,6 +13,11 @@ import {
 import { medusa } from "@/lib/medusa";
 import type { HttpTypes } from "@medusajs/types";
 
+/**
+ * Authenticated customer state backed by the Medusa session.
+ *
+ * TODO: Add profile editing and password-reset actions.
+ */
 type CustomerContextValue = {
   customer: HttpTypes.StoreCustomer | null;
   loading: boolean;
@@ -31,6 +36,7 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  /** Resolve the current customer from the Medusa session. */
   const refreshCustomer = useCallback(async () => {
     try {
       setLoading(true);
@@ -49,6 +55,7 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
     refreshCustomer();
   }, [refreshCustomer]);
 
+  /** End the Medusa auth session and clear local customer state. */
   const logout = useCallback(async () => {
     try {
       setError(null);

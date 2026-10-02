@@ -1,6 +1,14 @@
 import Medusa from "@medusajs/js-sdk";
 import type { HttpTypes } from "@medusajs/types";
 
+/**
+ * Shared Medusa API client for the storefront.
+ *
+ * Keep NEXT_PUBLIC_* environment references static so Next.js can inline them.
+ *
+ * TODO: Add a server-only API boundary for privileged checkout/account work.
+ */
+
 function requiredEnv(value: string | undefined, name: string): string {
   if (!value) {
     throw new Error(
@@ -35,6 +43,7 @@ export const medusa = new Medusa({
 
 export type MedusaProduct = HttpTypes.StoreProduct;
 
+/** Fetch the public product catalog for the configured region. */
 export async function getAllProducts(): Promise<MedusaProduct[]> {
   const { products } = await medusa.store.product.list({
     region_id: REGION_ID,
@@ -54,6 +63,7 @@ export async function getProductByHandle(
   return products[0];
 }
 
+/** Create the anonymous/session cart used by the storefront. */
 export async function createCart(): Promise<HttpTypes.StoreCart> {
   const { cart } = await medusa.store.cart.create({
     region_id: REGION_ID,
@@ -70,6 +80,7 @@ export async function getCart(
   return cart;
 }
 
+/** Add a variant to an existing Medusa cart. */
 export async function addToCart(
   cartId: string,
   variantId: string,
@@ -83,6 +94,7 @@ export async function addToCart(
   return cart;
 }
 
+/** Update a cart line quantity. */
 export async function updateCartItem(
   cartId: string,
   lineItemId: string,
@@ -99,6 +111,7 @@ export async function updateCartItem(
   return cart;
 }
 
+/** Remove a line item and return the updated cart. */
 export async function removeFromCart(
   cartId: string,
   lineItemId: string

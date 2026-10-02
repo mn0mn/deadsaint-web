@@ -22,6 +22,14 @@ import {
 
 import type { HttpTypes } from "@medusajs/types";
 
+/**
+ * Shared client-side cart state.
+ *
+ * Medusa remains the source of truth. sessionStorage only stores the cart ID
+ * needed to rehydrate the browser session.
+ *
+ * TODO: Handle backend cart expiry explicitly during checkout.
+ */
 type CartContextValue = {
   cart: HttpTypes.StoreCart | null;
   loading: boolean;
@@ -44,6 +52,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  /** Rehydrate the current browser session from its Medusa cart ID. */
   const loadCart = useCallback(async () => {
     try {
       setLoading(true);
@@ -75,6 +84,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     loadCart();
   }, [loadCart]);
 
+  /** Return the active cart or create one when shopping starts. */
   const ensureCart = useCallback(async () => {
     if (cart) {
       return cart;

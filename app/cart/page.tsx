@@ -5,10 +5,17 @@ import { useCart } from "@/app/providers/cartProvider";
 import { useLocale } from "@/components/LocaleProvider";
 import styles from "./cart.module.css";
 
+/** Format Medusa minor-unit prices for the active storefront locale. */
 function formatPrice(amount: number, currencyCode: string, locale: string) {
   return new Intl.NumberFormat(locale === "fa" ? "fa-IR" : "en-US", { style: "currency", currency: currencyCode.toUpperCase() }).format(amount / 100);
 }
 
+/**
+ * Shopping cart view backed by CartProvider.
+ *
+ * TODO: Replace placeholder shipping/tax rows with real checkout calculations.
+ * TODO: Wire the checkout button to the real checkout flow.
+ */
 export default function CartPage() {
   const { cart, loading, error, updateQuantity, removeItem } = useCart();
   const { locale, messages } = useLocale();

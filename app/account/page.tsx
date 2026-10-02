@@ -8,6 +8,13 @@ import { useCustomer } from "@/app/providers/customerProvider";
 import { useLocale } from "@/components/LocaleProvider";
 
 type AccountTab = "orders" | "details" | "addresses" | "settings";
+/**
+ * Customer account dashboard.
+ *
+ * TODO: Restrict the order query explicitly to the authenticated customer.
+ * TODO: Wire address, profile, newsletter, and account deletion controls.
+ * TODO: Add an order-detail view.
+ */
 type AccountOrder = { id: string; created_at?: string; total?: number; currency_code?: string; status?: string; items?: Array<{ title?: string }> };
 
 export default function AccountPage() {
