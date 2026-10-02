@@ -117,7 +117,7 @@ export async function removeFromCart(
 
 
 export async function getProductCategories(): Promise<HttpTypes.StoreProductCategory[]> {
-  const { product_categories } = await medusa.store.category.list({
+  const { product_categories } = await medusa.store.productCategory.list({
     limit: 100,
     order: "name",
   });
@@ -127,7 +127,7 @@ export async function getProductCategories(): Promise<HttpTypes.StoreProductCate
 export async function getProductCategoryByHandle(
   handle: string
 ): Promise<HttpTypes.StoreProductCategory | undefined> {
-  const { product_categories } = await medusa.store.category.list({
+  const { product_categories } = await medusa.store.productCategory.list({
     handle,
     limit: 1,
   });
