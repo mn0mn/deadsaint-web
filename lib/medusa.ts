@@ -114,3 +114,36 @@ export async function removeFromCart(
 
   return parent;
 }
+
+
+export async function getProductCategories(): Promise<HttpTypes.StoreProductCategory[]> {
+  const { product_categories } = await medusa.store.category.list({
+    limit: 100,
+    order: "name",
+  });
+  return product_categories;
+}
+
+export async function getProductCategoryByHandle(
+  handle: string
+): Promise<HttpTypes.StoreProductCategory | undefined> {
+  const { product_categories } = await medusa.store.category.list({
+    handle,
+    limit: 1,
+  });
+  return product_categories[0];
+}
+
+export async function getProductsByCategory(
+  categoryId: string,
+  optionValueIds: string[] = []
+): Promise<MedusaProduct[]> {
+  const { products } = await medusa.store.product.list({
+    region_id: REGION_ID,
+    category_id: categoryId,
+    ...(optionValueIds.length ? { option_value_id: optionValueIds } : {}),
+    fields: "*options,*variants.calculated_price,+variants.inventory_quantity",
+    limit: 100,
+  });
+  return products;
+}
