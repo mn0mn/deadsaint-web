@@ -6,8 +6,9 @@
 
 .art {
   aspect-ratio: 1;
-  background: var(--ink);
+  background: var(--noir);
   overflow: hidden;
+  border: 1px solid rgba(232, 225, 211, 0.08);
 }
 
 .image,
@@ -23,7 +24,7 @@
 }
 
 .placeholder {
-  background: var(--ink);
+  background: var(--noir);
 }
 
 .price {
