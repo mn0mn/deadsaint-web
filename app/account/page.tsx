@@ -11,9 +11,14 @@ type AccountTab = "orders" | "details" | "addresses" | "settings";
 /**
  * Customer account dashboard.
  *
- * TODO: Restrict the order query explicitly to the authenticated customer.
+ * Medusa's Store List Orders endpoint scopes results to the authenticated
+ * customer when the session is attached to the request. Keep this request
+ * session-authenticated and do not add a client-supplied customer_id filter.
+ *
+ * TODO: Add an integration regression test proving customer A cannot receive
+ * customer B's orders, and unauthenticated requests are rejected.
  * TODO: Wire address, profile, newsletter, and account deletion controls.
- * TODO: Add an order-detail view.
+ * TODO: Add an order-detail view with explicit ownership protection.
  */
 type AccountOrder = { id: string; created_at?: string; total?: number; currency_code?: string; status?: string; items?: Array<{ title?: string }> };
 
