@@ -48,7 +48,7 @@ export default function CartPage() {
       <aside className={styles.summary}><div className={styles.summaryStamp}><span>DS / 000</span><span>READY ROOM</span></div><div className={styles.summaryHeader}><span>{t.damage}</span><span>{cart.currency_code.toUpperCase()}</span></div>
         <div className={styles.totalRow}><span>{t.subtotal}</span><strong>{formatPrice(cart.subtotal ?? 0, cart.currency_code, locale)}</strong></div><div className={styles.divider} />
         <div className={styles.metaRow}><span>{t.shipping}</span><span>{t.calculated}</span></div><div className={styles.metaRow}><span>{t.tax}</span><span>{t.calculated}</span></div>
-        <Link href={href("/checkout")} className={styles.checkout}>{t.checkout}<span>↗</span></Link><Link href={href("/shop")} className={styles.continue}>{t.continue}</Link>
+        <button type="button" className={styles.checkout}>{t.checkout}<span>↗</span></button><Link href={href("/shop")} className={styles.continue}>{t.continue}</Link>
         <div className={styles.warning}><span>†</span><p>{t.warning}<br />{t.warning2}</p></div>
       </aside>
     </div>
