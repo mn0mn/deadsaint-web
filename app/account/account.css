@@ -99,3 +99,17 @@
   .account-footer { display:block; }
   .account-footer strong { display:block; margin-top:25px; }
 }
+
+.account-add-address { border:2px solid var(--ink); background:var(--ink); color:var(--paper); padding:10px 14px; font-family:monospace; font-size:10px; font-weight:900; letter-spacing:.08em; cursor:pointer; }
+.account-add-address:disabled { opacity:.5; cursor:not-allowed; }
+.account-address-actions { display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
+.account-danger { color:var(--blood); border-color:var(--blood); }
+.account-address-form { border:3px solid var(--ink); padding:25px; margin-bottom:18px; }
+.account-form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:15px; }
+.account-form-grid label { display:grid; gap:6px; }
+.account-form-grid label span { font-family:monospace; font-size:9px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; }
+.account-form-grid input { width:100%; box-sizing:border-box; border:2px solid var(--ink); background:transparent; color:var(--ink); padding:12px; font-family:monospace; font-size:12px; }
+.account-form-wide { grid-column:1 / -1; }
+.account-form-actions { display:flex; justify-content:flex-end; gap:18px; align-items:center; margin-top:20px; }
+.account-form-error { color:var(--blood); font-family:monospace; font-size:11px; font-weight:800; margin:0 0 18px; }
+@media (max-width:800px) { .account-form-grid { grid-template-columns:1fr; } .account-form-wide { grid-column:auto; } .account-address-actions { align-items:flex-start; } }
