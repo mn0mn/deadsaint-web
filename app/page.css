@@ -1,5 +1,8 @@
 /* ===== HOME PAGE ===== */
 
+/* -------------------------------------------------------------------------- */
+/* Homepage hero and primary call to action. */
+/* -------------------------------------------------------------------------- */
 .home-hero {
   padding: clamp(60px, 10vw, 110px) 5vw 50px;
   border-bottom: 4px solid var(--noir);
@@ -71,6 +74,7 @@
   line-height: 1.6;
 }
 
+/* Editorial ticker separating the hero from the manifesto. */
 .home-tape {
   display: flex;
   overflow: hidden;
@@ -92,6 +96,7 @@
   margin-right: 34px;
 }
 
+/* Brand statement and link to the full manifesto. */
 .home-manifesto {
   display: flex;
   flex-direction: column;
@@ -122,6 +127,7 @@
   padding-bottom: 3px;
 }
 
+/* Featured product collection and homepage card treatment. */
 .featured {
   padding: 60px 5vw 20px;
   border-top: 3px solid var(--noir);
@@ -168,6 +174,7 @@
   transform: translate(-3px, -3px);
 }
 
+/* Compact homepage composition on small screens. */
 @media (max-width: 760px) {
   .home-hero-row {
     flex-direction: column;
