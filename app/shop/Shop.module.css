@@ -1,3 +1,6 @@
+/* -------------------------------------------------------------------------- */
+/* Shop route: page heading and category navigation. */
+/* -------------------------------------------------------------------------- */
 .shop {
   min-width: 0;
   padding-bottom: 96px;
@@ -30,6 +33,7 @@
 .categoryTrigger::after { content:"FILTER / CURATED CATEGORIES"; justify-self:start; color:var(--ash); font:600 var(--text-xs)/1 var(--font-mono); letter-spacing:.11em; }
 .categoryIcon { display:inline-grid; width:38px; height:38px; place-items:center; border:1px solid rgba(232,225,211,.35); color:var(--bone); font:400 var(--text-lg)/1 var(--font-mono); transition:transform 180ms ease,background 180ms ease,color 180ms ease,border-color 180ms ease; }
 .categoryMenu[open] .categoryIcon { transform:rotate(45deg); background:var(--blood); border-color:var(--blood); color:var(--bone); }
+/* Category tiles and their decorative/interactive details. */
 .categoryPanel { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; padding:1px 0 0; background:rgba(232,225,211,.14); border-bottom:1px solid rgba(232,225,211,.14); }
 .category { min-height:280px; padding:28px 26px 30px; background:var(--noir); position:relative; overflow:hidden; display:flex; flex-direction:column; text-decoration:none; }
 .category::before { content:""; position:absolute; top:0; inset-inline:0; height:3px; background:var(--blood); transform:scaleX(0); transform-origin:left; transition:transform 220ms ease; }
@@ -41,6 +45,7 @@
 .categoryDescription { max-width:34ch; color:var(--ash); font:500 var(--text-sm)/1.55 var(--font-sans); }
 .categoryArrow { margin-top:auto; padding-top:32px; align-self:flex-end; color:rgba(232,225,211,.3); font:400 var(--text-lg)/1 var(--font-mono); transition:color 140ms ease,transform 140ms ease; }
 .category:hover .categoryArrow { color:var(--blood); transform:translate(3px,-3px); }
+/* Subcategory links and product grid spacing. */
 .subcategories { display:flex; flex-direction:column; align-items:stretch; gap:0; }
 .subcategory { display:flex; align-items:center; justify-content:space-between; min-height:38px; padding:8px 0; border-bottom:1px solid rgba(232,225,211,.08); color:var(--ash); font:700 var(--text-sm)/1.3 var(--font-mono); letter-spacing:.04em; text-decoration:none; text-transform:uppercase; transition:color 140ms ease,padding 140ms ease,border-color 140ms ease; }
 .subcategory::after { content:"↗"; color:rgba(232,225,211,.25); transition:color 140ms ease,transform 140ms ease; }
@@ -48,5 +53,6 @@
 .subcategory:hover::after { color:var(--blood); transform:translate(2px,-2px); }
 .shop > .grid { margin-top:0; padding-top:48px; }
 .shop > .grid > * { border-bottom:1px solid rgba(232,225,211,.1); padding-bottom:24px; }
+/* Tablet and mobile layouts. */
 @media (max-width:900px) { .categoryPanel{grid-template-columns:1fr}.category{min-height:0;} }
 @media (max-width:700px) { .shop h1{padding-top:42px;font-size:clamp(44px,12vw,64px)} .categoryTrigger{grid-template-columns:1fr auto;gap:12px}.categoryTrigger::after{display:none}.categoryTrigger > span:first-child{font-size:var(--text-base)}.categoryTrigger > span:first-child::before{width:30px;height:30px}.category{padding:24px 18px 26px}.categoryName{margin-bottom:16px}.shop > .grid{padding-top:30px}.subcategory{font-size:var(--text-sm)} }
