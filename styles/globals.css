@@ -1,3 +1,6 @@
+/* -------------------------------------------------------------------------- */
+/* Design tokens: palette, typography, and shared spacing/line-height values. */
+/* -------------------------------------------------------------------------- */
 :root {
   --paper: #e8e1d3;
   --ink: #0b0b0b;
@@ -25,6 +28,9 @@
   --leading-tight: 1.08;
 }
 
+/* -------------------------------------------------------------------------- */
+/* Document foundation and shared element defaults. */
+/* -------------------------------------------------------------------------- */
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 html { font-size: 16px; }
@@ -51,6 +57,9 @@ p, li { font-size: var(--text-base); }
 small { font-size: var(--text-sm); }
 button, input, select, textarea { font: inherit; }
 
+/* -------------------------------------------------------------------------- */
+/* Shared page canvas. The home page opts into its light editorial palette. */
+/* -------------------------------------------------------------------------- */
 main {
   --page-bg: var(--noir);
   --page-fg: var(--bone);
@@ -69,6 +78,9 @@ main:has(.home-hero) {
   color: var(--ink);
 }
 
+/* -------------------------------------------------------------------------- */
+/* Global site header, navigation, language switcher, and cart preview. */
+/* -------------------------------------------------------------------------- */
 .site-header { display: grid; grid-template-columns: minmax(250px, 1fr) auto minmax(250px, 1fr); align-items: center; min-height: 100px; padding: 16px 5vw; background: var(--noir); color: var(--bone); border-bottom: 1px solid rgba(232,225,211,.12); }
 .site-header .header-brand { display:flex; align-items:center; min-width:0; }
 .site-header .logo { display:block; width:58px; height:51px; flex:0 0 auto; }
@@ -104,15 +116,18 @@ main:has(.home-hero) {
 .cart-empty { padding:8px 2px 2px; }
 .cart-empty > span { color:var(--blood); font:800 .75rem/1.3 var(--font-mono); letter-spacing:.1em; }
 .cart-empty p { margin:10px 0 0; color:var(--ash); font:600 .75rem/1.5 var(--font-mono); }
+/* Global footer. */
 .site-footer { display:flex; align-items:center; justify-content:space-between; gap:24px; padding:24px 5vw; background:var(--noir); color:var(--bone); text-align:center; }
 .site-footer p { margin:0; }
 .site-footer .language-switcher { margin-inline-start:auto; }
 .site-footer .language-switcher span { font-size:1.05rem; }
+/* Mobile navigation control and shared button/grid primitives. */
 .menu-toggle { display:none; flex-direction:column; justify-content:center; align-items:center; gap:5px; width:36px; height:36px; padding:8px; background:none; border:none; cursor:pointer; }
 .menu-toggle span { display:block; width:22px; height:2px; background:var(--bone); border-radius:1px; transition:transform .25s ease,opacity .2s ease; }
 .menu-toggle.is-open span:nth-child(1){transform:translateY(7px) rotate(45deg)} .menu-toggle.is-open span:nth-child(2){opacity:0} .menu-toggle.is-open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 .btn { display:inline-block; padding:14px 28px; background:var(--ink); color:var(--paper); text-decoration:none; border:none; cursor:pointer; font-size:.875rem; line-height:1.25; }
 .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:32px; padding:40px 5vw; }
+/* RTL typography and shared responsive shell behavior. */
 html[dir="rtl"] body { font-family: Tahoma, "Arial", sans-serif; }
 html[dir="rtl"] .brand-name, html[dir="rtl"] .brand-tagline, html[dir="rtl"] .site-header nav a, html[dir="rtl"] .header-right a, html[dir="rtl"] .language-switcher { letter-spacing:0; }
 @media (max-width:980px){ .site-header{grid-template-columns:1fr auto}.site-header nav{display:none}.menu-toggle{display:flex}.header-right{gap:18px}.cart-dropdown{inset-inline-end:-8px} }
